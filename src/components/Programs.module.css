@@ -26,7 +26,8 @@
 
 .card:hover {
     box-shadow: var(--shadow-xl);
-    transform: translateY(-4px);
+    transform: translateY(-8px) scale(1.02);
+    border-left-width: 8px;
 }
 
 .cardHeader {
