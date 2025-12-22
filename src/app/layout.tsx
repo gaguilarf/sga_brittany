@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import ConfigureAmplifyClientSide from "@/components/ConfigureAmplify";
 
 export const metadata: Metadata = {
   title: "Brittany Group - Aprende Inglés de Verdad",
@@ -15,7 +14,6 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
-        <ConfigureAmplifyClientSide />
         {children}
       </body>
     </html>

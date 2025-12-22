@@ -1,6 +1,4 @@
 // Lead Controller - Business Logic
-import { generateClient } from "aws-amplify/api";
-import type { Schema } from "../../amplify/data/resource";
 import { Lead } from "@/models/Lead";
 
 export class LeadController {
@@ -48,7 +46,7 @@ export class LeadController {
     };
   }
 
-  // Submit lead (placeholder for future API integration)
+  // Submit lead - TODO: Integrate with NestJS REST API
   static async submitLead(
     lead: Lead
   ): Promise<{ success: boolean; message: string }> {
@@ -61,25 +59,17 @@ export class LeadController {
           message: validation.errors[0], // Mostramos el primer error para no saturar
         };
       }
-      const client = generateClient<Schema>();
 
-      // 2. LLAMADA REAL A AWS AMPLIFY
-      const { data: newLead, errors } = await client.models.Lead.create({
-        nombreCompleto: lead.nombreCompleto,
-        edad: lead.edad,
-        telefono: lead.telefono,
-        modalidad: lead.modalidad,
-        sede: lead.sede,
-        medioContacto: lead.medioContacto,
-        producto: lead.producto,
-        aceptaContacto: lead.aceptaContacto,
-      });
+      // TODO: Reemplazar con llamada a API REST de NestJS
+      // const response = await fetch('/api/leads', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(lead)
+      // });
 
-      if (errors) {
-        console.error("Amplify Errors:", errors);
-        throw new Error("Error en la persistencia de datos");
-      }
+      console.log("Lead data to submit:", lead);
 
+      // Placeholder response - simular éxito
       return {
         success: true,
         message:
