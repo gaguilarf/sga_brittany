@@ -4,7 +4,17 @@ import styles from "./Hero.module.css";
 export default function Hero() {
   return (
     <section className={styles.hero}>
-      <div className="container">
+      {/* 1. Video: Debe estar fuera del div container para no empujar el texto */}
+      <video autoPlay muted loop playsInline className={styles.videoBackground}>
+        {/* IMPORTANTE: El video debe estar en la carpeta 'public' y llamarse así */}
+        <source src="/background_hero.mp4" type="video/mp4" />
+      </video>
+
+      {/* 2. Capa de transparencia para que el texto se lea bien */}
+      <div className={styles.overlay}></div>
+
+      {/* 3. Contenido: Envuelta en contentWrapper para estar sobre el video */}
+      <div className={`container ${styles.contentWrapper}`}>
         <div className={styles.heroContent}>
           <div className={styles.heroText}>
             <h1 className={styles.title}>

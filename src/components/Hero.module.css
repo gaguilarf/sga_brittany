@@ -1,22 +1,51 @@
 .hero {
-  background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
+  position: relative; /* Indispensable */
   padding: 4rem 0;
   min-height: calc(100vh - 80px);
   display: flex;
   align-items: center;
+  overflow: hidden;
 }
 
+.videoBackground {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centra el video */
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: 0; /* Al fondo */
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(240, 247, 255, 0.7) 100%,
+    rgba(255, 255, 255, 0.7) 100%
+  );
+  z-index: 1; /* Sobre el video */
+}
+
+.contentWrapper {
+  position: relative;
+  z-index: 2; /* Sobre el overlay y el video */
+  width: 100%;
+}
+
+/* El resto de tus estilos (.title, .subtitle, etc.) se mantienen igual */
 .heroContent {
   display: grid;
   grid-template-columns: 1fr;
   gap: 3rem;
   align-items: start;
-}
-
-.heroText {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
 }
 
 .title {
