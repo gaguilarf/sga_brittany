@@ -71,6 +71,7 @@ export class LeadController {
         modalidad: lead.modalidad,
         sede: lead.sede,
         medioContacto: lead.medioContacto,
+        producto: lead.producto,
         aceptaContacto: lead.aceptaContacto,
       });
 

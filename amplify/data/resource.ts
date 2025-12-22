@@ -15,6 +15,7 @@ const schema = a.schema({
       modalidad: a.enum(["Presencial", "Virtual"]),
       sede: a.string().required(),
       medioContacto: a.string().required(),
+      producto: a.string().required(),
       aceptaContacto: a.boolean().required(),
     })
     .authorization((allow) => [
