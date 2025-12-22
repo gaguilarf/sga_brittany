@@ -1,44 +1,91 @@
 .socialProof {
-    background: var(--color-blue-primary);
-    padding: 2.5rem 0;
+  background: var(--color-blue-primary);
+  /* Degradado sutil para dar profundidad */
+  background: linear-gradient(
+    135deg,
+    var(--color-blue-primary) 0%,
+    #1a46a3 100%
+  );
+  padding: 3rem 0;
 }
 
 .statsGrid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    text-align: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem; /* Aumentado para móvil */
+  text-align: center;
 }
 
 .stat {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  background-color: var(--color-orange-primary);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  /* CAMBIO CLAVE: Alinea todo al borde izquierdo */
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.5rem;
+  border-top: 10px white;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: left; /* Asegura que el texto se alinee a la izquierda */
+}
+
+.stat:hover {
+  transform: translateY(-5px);
+  box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.2);
+}
+
+/* Efecto para que el icono resalte al pasar el mouse */
+.stat:hover .iconContainer {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1) rotate(5deg);
 }
 
 .statValue {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--color-orange-primary);
+  font-size: 2.25rem;
+  font-weight: 800; /* Extra bold para impacto */
+  color: white;
+  line-height: 1;
 }
 
 .statLabel {
-    font-size: 0.95rem;
-    color: var(--color-white);
-    font-weight: 500;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  text-transform: uppercase; /* Estilo de microcopy */
+  letter-spacing: 0.5px;
+}
+
+.iconContainer {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
 }
 
 @media (min-width: 768px) {
-    .statsGrid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 3rem;
-    }
+  .statsGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
 
-    .statValue {
-        font-size: 2.5rem;
-    }
+  .stat {
+    padding: 1.5rem 2.5rem;
+  }
 
-    .statLabel {
-        font-size: 1rem;
-    }
+  .statValue {
+    font-size: 3rem;
+  }
+
+  .statLabel {
+    font-size: 1.5rem;
+  }
 }

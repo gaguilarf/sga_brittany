@@ -56,14 +56,13 @@ export default function LeadForm() {
         modalidad: undefined,
         sede: "",
         medioContacto: "",
+        producto: "",
         aceptaContacto: false,
       });
-
       setTimeout(() => setSubmitSuccess(false), 5000);
     } else {
       setErrors([result.message]);
     }
-
     setIsSubmitting(false);
   };
 
@@ -71,137 +70,159 @@ export default function LeadForm() {
     <form className={styles.form} onSubmit={handleSubmit}>
       <h3 className={styles.formTitle}>Solicita Información</h3>
 
+      {/* Nombre Completo */}
       <div className={styles.formGroup}>
-        <label htmlFor="nombreCompleto" className={styles.label}>
-          Nombre y Apellido <span className={styles.required}>*</span>
-        </label>
-        <input
-          type="text"
-          id="nombreCompleto"
-          name="nombreCompleto"
-          value={formData.nombreCompleto}
-          onChange={handleChange}
-          className={styles.input}
-          placeholder="Ej: María Pérez"
-          required
-        />
+        <div className={styles.inputWrapper}>
+          <input
+            type="text"
+            id="nombreCompleto"
+            name="nombreCompleto"
+            value={formData.nombreCompleto}
+            onChange={handleChange}
+            className={styles.input}
+            placeholder=" "
+            required
+          />
+          <label htmlFor="nombreCompleto" className={styles.label}>
+            Nombre y Apellido <span className={styles.required}>*</span>
+          </label>
+        </div>
       </div>
 
+      {/* Edad */}
       <div className={styles.formGroup}>
-        <label htmlFor="edad" className={styles.label}>
-          Edad <span className={styles.required}>*</span>
-        </label>
-        <input
-          type="number"
-          id="edad"
-          name="edad"
-          value={formData.edad || ""}
-          onChange={handleChange}
-          className={styles.input}
-          placeholder="18"
-          min="4"
-          max="100"
-          required
-        />
+        <div className={styles.inputWrapper}>
+          <input
+            type="number"
+            id="edad"
+            name="edad"
+            value={formData.edad || ""}
+            onChange={handleChange}
+            className={styles.input}
+            placeholder=" "
+            min="4"
+            max="100"
+            required
+          />
+          <label htmlFor="edad" className={styles.label}>
+            Edad <span className={styles.required}>*</span>
+          </label>
+        </div>
       </div>
 
+      {/* Teléfono */}
       <div className={styles.formGroup}>
-        <label htmlFor="telefono" className={styles.label}>
-          Teléfono / WhatsApp <span className={styles.required}>*</span>
-        </label>
-        <input
-          type="tel"
-          id="telefono"
-          name="telefono"
-          value={formData.telefono}
-          onChange={handleChange}
-          className={styles.input}
-          placeholder="+51 987 654 321"
-          required
-        />
+        <div className={styles.inputWrapper}>
+          <input
+            type="tel"
+            id="telefono"
+            name="telefono"
+            value={formData.telefono}
+            onChange={handleChange}
+            className={styles.input}
+            placeholder=" "
+            required
+          />
+          <label htmlFor="telefono" className={styles.label}>
+            Teléfono / WhatsApp <span className={styles.required}>*</span>
+          </label>
+        </div>
       </div>
 
+      {/* Modalidad */}
       <div className={styles.formGroup}>
-        <label htmlFor="modalidad" className={styles.label}>
-          Modalidad <span className={styles.required}>*</span>
-        </label>
-        <select
-          id="modalidad"
-          name="modalidad"
-          value={formData.modalidad || ""}
-          onChange={handleChange}
-          className={styles.select}
-          required
-        >
-          <option value="">Seleccionar Modalidad</option>
-          <option value="Virtual">Virtual</option>
-          <option value="Presencial">Presencial</option>
-        </select>
+        <div className={styles.inputWrapper}>
+          <select
+            id="modalidad"
+            name="modalidad"
+            value={formData.modalidad || ""}
+            onChange={handleChange}
+            className={styles.select}
+            required
+          >
+            <option value="" disabled hidden></option>
+            <option value="Virtual">Virtual</option>
+            <option value="Presencial">Presencial</option>
+          </select>
+          <label htmlFor="modalidad" className={styles.label}>
+            Modalidad <span className={styles.required}>*</span>
+          </label>
+        </div>
       </div>
 
+      {/* Sede */}
       <div className={styles.formGroup}>
-        <label htmlFor="sede" className={styles.label}>
-          Sede <span className={styles.required}>*</span>
-        </label>
-        <select
-          id="sede"
-          name="sede"
-          value={formData.sede}
-          onChange={handleChange}
-          className={styles.select}
-          required
-        >
-          <option value="">Seleccionar Sede</option>
-          {SEDES.map((sede) => (
-            <option key={sede} value={sede}>
-              {sede}
-            </option>
-          ))}
-        </select>
+        <div className={styles.inputWrapper}>
+          <select
+            id="sede"
+            name="sede"
+            value={formData.sede || ""}
+            onChange={handleChange}
+            className={styles.select}
+            required
+          >
+            <option value="" disabled hidden></option>
+            {SEDES.map((sede) => (
+              <option key={sede} value={sede}>
+                {sede}
+              </option>
+            ))}
+          </select>
+          <label htmlFor="sede" className={styles.label}>
+            Sede <span className={styles.required}>*</span>
+          </label>
+        </div>
       </div>
 
+      {/* Medio de Contacto */}
       <div className={styles.formGroup}>
-        <label htmlFor="medioContacto" className={styles.label}>
-          ¿Cómo te enteraste? <span className={styles.required}>*</span>
-        </label>
-        <select
-          id="medioContacto"
-          name="medioContacto"
-          value={formData.medioContacto}
-          onChange={handleChange}
-          className={styles.select}
-          required
-        >
-          <option value="">Seleccionar</option>
-          {MEDIOS_CONTACTO.map((medio) => (
-            <option key={medio} value={medio}>
-              {medio}
-            </option>
-          ))}
-        </select>
+        <div className={styles.inputWrapper}>
+          <select
+            id="medioContacto"
+            name="medioContacto"
+            value={formData.medioContacto || ""}
+            onChange={handleChange}
+            className={styles.select}
+            required
+          >
+            <option value="" disabled hidden></option>
+            {MEDIOS_CONTACTO.map((medio) => (
+              <option key={medio} value={medio}>
+                {medio}
+              </option>
+            ))}
+          </select>
+          <label htmlFor="medioContacto" className={styles.label}>
+            ¿Cómo te enteraste? <span className={styles.required}>*</span>
+          </label>
+        </div>
       </div>
 
+      {/* Programa */}
       <div className={styles.formGroup}>
-        <label htmlFor="producto" className={styles.label}>
-          Programa de Interés <span className={styles.required}>*</span>
-        </label>
-        <select
-          id="producto"
-          name="producto"
-          value={formData.producto}
-          onChange={handleChange}
-          className={styles.select}
-          required
-        >
-          <option value="">Seleccionar programa</option>
-          {PRODUCTOS.map((prod) => (
-            <option key={prod} value={prod}>
-              {prod}
-            </option>
-          ))}
-        </select>
+        <div className={styles.inputWrapper}>
+          <select
+            id="producto"
+            name="producto"
+            value={formData.producto || ""}
+            onChange={handleChange}
+            className={styles.select}
+            required
+          >
+            <option value="" disabled hidden></option>
+            {PRODUCTOS.map((prod) => (
+              <option key={prod} value={prod}>
+                {prod}
+              </option>
+            ))}
+          </select>
+          <label htmlFor="producto" className={styles.label}>
+            Programa de Interés <span className={styles.required}>*</span>
+          </label>
+        </div>
       </div>
 
+      {/* Checkbox y Mensajes */}
       <div className={styles.checkboxGroup}>
         <input
           type="checkbox"
@@ -213,14 +234,14 @@ export default function LeadForm() {
           required
         />
         <label htmlFor="aceptaContacto" className={styles.checkboxLabel}>
-          Acepto ser contactado por Brittany Group para recibir información
+          Acepto ser contactado por Brittany Group
         </label>
       </div>
 
       {errors.length > 0 && (
         <div className={styles.errorBox}>
-          {errors.map((error, index) => (
-            <p key={index} className={styles.errorText}>
+          {errors.map((error, i) => (
+            <p key={i} className={styles.errorText}>
               {error}
             </p>
           ))}
@@ -229,7 +250,7 @@ export default function LeadForm() {
 
       {submitSuccess && (
         <div className={styles.successBox}>
-          ¡Gracias! Te contactaremos a la brevedad posible.
+          ¡Gracias! Te contactaremos pronto.
         </div>
       )}
 
@@ -240,8 +261,6 @@ export default function LeadForm() {
       >
         {isSubmitting ? "Enviando..." : "Quiero información"}
       </button>
-
-      <p className={styles.microcopy}>Te contactamos a la brevedad posible.</p>
     </form>
   );
 }
