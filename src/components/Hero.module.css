@@ -26,11 +26,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    135deg,
-    rgba(240, 247, 255, 0.7) 100%,
-    rgba(255, 255, 255, 0.7) 100%
-  );
+  background: linear-gradient(135deg, rgba(245, 245, 245, 0.2) 100%);
   z-index: 1; /* Sobre el video */
 }
 
@@ -46,6 +42,62 @@
   grid-template-columns: 1fr;
   gap: 3rem;
   align-items: start;
+}
+
+.mainTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alinea todo a la izquierda */
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Estilo para "APRENDE" */
+.badgeBlue {
+  background-color: var(--color-blue-primary);
+  color: white;
+  padding: 0.2rem 1rem;
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  border-radius: 4px;
+}
+
+/* Estilo para "Inglés de verdad" */
+.badgeWhite {
+  font-size: 3.5rem; /* Más grande para dar jerarquía */
+  background-color: white;
+  color: var(--color-blue-primary);
+  padding: 1rem;
+  padding-bottom: 1.5rem;
+
+  font-weight: 900;
+  line-height: 1;
+  border-radius: 5px;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1); /* Sombra plana tipo comic/moderno */
+
+  margin: 0.2rem 0.2;
+}
+
+/* Estilo para "EN 1 AÑO" */
+.badgeOrange {
+  background-color: var(--color-orange-primary);
+  color: white;
+  padding: 0.3rem 1.2rem;
+  font-size: 2rem;
+  font-weight: 900;
+  border-radius: 4px;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1); /* Sombra plana tipo comic/moderno */
+}
+
+/* Bloque de Subtítulo y Descripción */
+.textBlock {
+  padding-left: 1.5rem;
+  margin-bottom: 2rem;
+  background-color: rgb(255, 255, 255);
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  border-radius: 5px;
 }
 
 .title {
@@ -73,15 +125,37 @@
   flex-direction: column;
   gap: 1rem;
   margin: 1rem 0;
+  max-width: 550px;
 }
 
 .benefit {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  font-size: 1.125rem;
-  color: var(--color-gray-800);
-  font-weight: 500;
+  gap: 1.5rem; /* Espacio entre el icono y el texto */
+  width: 100%;
+
+  /* --- AJUSTES DE ESPACIADO Y BORDES --- */
+  padding: 0.5rem 2rem; /* Más aire por dentro (Arriba/Abajo Izquierda/Derecha) */
+  border-radius: 15px; /* Bordes mucho más redondeados y modernos */
+
+  /* Fondo con efecto cristal (Glassmorphism) */
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px); /* Desfoque sutil del video de fondo */
+  border: 1px solid rgba(255, 255, 255, 0.8);
+
+  /* Sombra suave para dar profundidad */
+  box-shadow: 0 8px 20px rgba(218, 158, 158, 0.04);
+
+  transition: all 0.3s ease;
+  min-width: 320px; /* Evita que se vean muy flacas */
+}
+
+/* Efecto al pasar el mouse */
+.benefit:hover {
+  transform: translateY(-5px); /* Flota un poco hacia arriba */
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+  border-color: var(--color-blue-primary);
 }
 
 .checkIcon {
@@ -92,6 +166,7 @@
   height: 2rem;
   background: var(--color-orange-primary);
   color: var(--color-white);
+  border-radius: 12px;
   border-radius: 50%;
   font-weight: 700;
   flex-shrink: 0;
@@ -113,7 +188,7 @@
   }
 
   .heroContent {
-    grid-template-columns: 1fr 450px;
+    grid-template-columns: 1fr 600px;
     gap: 4rem;
   }
 
@@ -125,5 +200,15 @@
 @media (max-width: 1023px) {
   .heroForm {
     position: static;
+  }
+}
+
+/* Responsivo para móviles */
+@media (max-width: 768px) {
+  .textBlack {
+    font-size: 2.5rem;
+  }
+  .badgeOrange {
+    font-size: 1.5rem;
   }
 }
