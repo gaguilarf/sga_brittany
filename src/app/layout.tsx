@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import ConfigureAmplifyClientSide from "@/components/ConfigureAmplify";
 
 export const metadata: Metadata = {
   title: "Brittany Group - Aprende Inglés de Verdad",
-  description: "Programas de inglés para Pre Kids, Kids, Teens y Adultos. Certificación internacional, profesores extranjeros y horarios flexibles. Virtual y presencial en Lima y Arequipa.",
-  keywords: "inglés, clases de inglés, Brittany Group, certificación internacional, British Council, Lima, Arequipa",
+  description: "Programas de inglés para Pre Kids, Kids, Teens y Adultos.",
 };
 
 export default function RootLayout({
@@ -14,7 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body>{children}</body>
+      <body>
+        <ConfigureAmplifyClientSide />
+        {children}
+      </body>
     </html>
   );
 }
