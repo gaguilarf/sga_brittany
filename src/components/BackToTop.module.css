@@ -1,0 +1,47 @@
+.backToTop {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 56px;
+    height: 56px;
+    background-color: var(--color-orange-primary);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+}
+
+.backToTop.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.backToTop:hover {
+    background-color: var(--color-orange-light);
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.backToTop:active {
+    transform: translateY(-2px);
+}
+
+/* Responsivo para móviles */
+@media (max-width: 768px) {
+    .backToTop {
+        bottom: 1.5rem;
+        right: 1.5rem;
+        width: 50px;
+        height: 50px;
+    }
+}

@@ -61,7 +61,7 @@
 
   /* Container */
   --container-max-width: 1280px;
-  --container-padding: 1.5rem;
+  --container-padding: 1rem;
 }
 
 * {

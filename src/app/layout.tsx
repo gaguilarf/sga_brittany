@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import BackToTop from "@/components/BackToTop";
 
 export const metadata: Metadata = {
   title: "Brittany Group - Aprende Inglés de Verdad",
@@ -15,6 +16,7 @@ export default function RootLayout({
     <html lang="es">
       <body>
         {children}
+        <BackToTop />
       </body>
     </html>
   );

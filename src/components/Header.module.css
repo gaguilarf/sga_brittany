@@ -6,6 +6,10 @@
     box-shadow: var(--shadow-md);
 }
 
+.container {
+    margin: 0 1rem;
+}
+
 .headerContent {
     display: flex;
     align-items: center;
@@ -48,9 +52,10 @@
 @media (min-width: 768px) {
     .nav {
         display: flex;
+        align-items: center;
     }
 
     .headerContent {
-        padding: 1.25rem 0;
+        padding: 1rem 0;
     }
 }
