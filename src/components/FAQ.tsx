@@ -9,7 +9,7 @@ export default function FAQ() {
     const faqs = [
         {
             question: '¿En cuánto tiempo veo resultados?',
-            answer: 'Desde el primer mes notarás mejoras en tu comprensión y pronunciación. En 6 meses podrás mantener conversaciones básicas, y en 1 año alcanzarás un nivel intermedio con certificación internacional.',
+            answer: 'Desde el primer mes notarás mejoras en tu comprensión y pronunciación. En 6 meses podrás mantener conversaciones de nivel intermedio, y en 1 año alcanzarás un nivel avanzado con certificación internacional.',
         },
         {
             question: '¿Puedo recuperar clases?',
