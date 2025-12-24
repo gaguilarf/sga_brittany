@@ -10,8 +10,8 @@ const stats = [
     },
     { value: "7 Sedes", label: "En Perú", icon: <MapPin size={32} /> },
     {
-        value: "Clubes de",
-        label: "Conversación",
+        value: "Clubes",
+        label: "de conversación",
         icon: <MessageSquare size={32} />,
     },
 ];
