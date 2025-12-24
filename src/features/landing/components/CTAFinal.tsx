@@ -15,7 +15,7 @@ export default function CTAFinal() {
                             Quiero que me contacten
                         </a>
                         <a
-                            href="https://wa.me/51999999999"
+                            href="https://wa.me/51928200102"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="btn btn-secondary"
