@@ -2,7 +2,7 @@ import { Users, Calendar, MapPin, MessageSquare } from "lucide-react";
 import styles from "./SocialProof.module.css";
 
 const stats = [
-    { value: "4.8/5", label: "Alumnos satisfechos", icon: <Users size={32} /> },
+    { value: "+10,000", label: "Alumnos egresados", icon: <Users size={32} /> },
     {
         value: "+25 años",
         label: "Enseñando inglés",
@@ -10,8 +10,8 @@ const stats = [
     },
     { value: "7 Sedes", label: "En Perú", icon: <MapPin size={32} /> },
     {
-        value: "Real Club",
-        label: "Práctica real",
+        value: "Clubes de",
+        label: "Conversación",
         icon: <MessageSquare size={32} />,
     },
 ];
