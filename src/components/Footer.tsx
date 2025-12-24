@@ -5,14 +5,14 @@ export default function Footer() {
         {
             ciudad: 'Lima',
             direcciones: [
-                { nombre: 'Miraflores', direccion: 'Av. Larco 1234', telefono: '+51 987 654 321' },
-                { nombre: 'Lince', direccion: 'Av. Arenales 5678', telefono: '+51 987 654 322' },
+                { nombre: 'Miraflores', direccion: 'Av. Benavides 330', telefono: '(01) 4085672' },
+                { nombre: 'Lince', direccion: 'Av. Arequipa 1604', telefono: '(01) 4128243' },
             ],
         },
         {
             ciudad: 'Arequipa',
             direcciones: [
-                { nombre: 'Bustamante', direccion: 'Calle Bustamante 123', telefono: '+51 987 654 323' },
+                { nombre: 'José Luis Bustamante R.', direccion: 'Av. EEUU (a media cuadra de la pizzería Presto) ', telefono: '(054) 691874' },
                 { nombre: 'Centro', direccion: 'Calle Mercaderes 456', telefono: '+51 987 654 324' },
                 { nombre: 'Cayma', direccion: 'Av. Cayma 789', telefono: '+51 987 654 325' },
                 { nombre: 'Umacollo', direccion: 'Av. Umacollo 321', telefono: '+51 987 654 326' },
