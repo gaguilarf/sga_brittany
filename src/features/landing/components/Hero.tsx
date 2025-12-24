@@ -1,4 +1,4 @@
-import LeadForm from "./LeadForm";
+import LeadForm from "@/shared/components/LeadForm";
 import styles from "./Hero.module.css";
 
 export default function Hero() {

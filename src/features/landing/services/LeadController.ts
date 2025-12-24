@@ -1,5 +1,6 @@
 // Lead Controller - Business Logic
-import { Lead } from "@/models/Lead";
+import { Lead } from "../models/Lead";
+import { LeadApi, ApiError } from "@/shared/services/api";
 
 export class LeadController {
   // Validate lead data
@@ -46,41 +47,64 @@ export class LeadController {
     };
   }
 
-  // Submit lead - TODO: Integrate with NestJS REST API
+  // Submit lead to API
   static async submitLead(
     lead: Lead
   ): Promise<{ success: boolean; message: string }> {
     try {
-      // 1. Validar primero
+      // 1. Validar primero (client-side validation)
       const validation = this.validateLead(lead);
       if (!validation.isValid) {
         return {
           success: false,
-          message: validation.errors[0], // Mostramos el primer error para no saturar
+          message: validation.errors[0],
         };
       }
 
-      // TODO: Reemplazar con llamada a API REST de NestJS
-      // const response = await fetch('/api/leads', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(lead)
-      // });
+      // 2. Llamar a la API
+      const response = await LeadApi.createLead({
+        nombreCompleto: lead.nombreCompleto,
+        edad: lead.edad,
+        telefono: lead.telefono,
+        modalidad: lead.modalidad,
+        sede: lead.sede,
+        medioContacto: lead.medioContacto,
+        producto: lead.producto,
+        aceptaContacto: lead.aceptaContacto,
+      });
 
-      console.log("Lead data to submit:", lead);
+      console.log("Lead creado exitosamente:", response);
 
-      // Placeholder response - simular éxito
       return {
         success: true,
         message:
           "¡Registro exitoso! Un asesor de Brittany Group te contactará pronto.",
       };
     } catch (error) {
-      console.error("Error detallado:", error);
+      console.error("Error al enviar lead:", error);
+
+      const apiError = error as ApiError;
+
+      // Mapear errores de la API a mensajes amigables
+      if (apiError.statusCode === 400) {
+        return {
+          success: false,
+          message: apiError.message || "Los datos ingresados no son válidos. Por favor verifica la información.",
+        };
+      }
+
+      if (apiError.statusCode === 0) {
+        return {
+          success: false,
+          message:
+            "No se pudo conectar con el servidor. Por favor verifica tu conexión a internet.",
+        };
+      }
+
       return {
         success: false,
         message:
-          "Hubo un problema al conectar con el servidor. Inténtalo por WhatsApp.",
+          "Hubo un problema al procesar tu solicitud. Por favor intenta nuevamente o contáctanos por WhatsApp.",
       };
     }
   }

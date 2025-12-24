@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Lead, SEDES, MEDIOS_CONTACTO, PRODUCTOS } from "@/models/Lead";
-import { LeadController } from "@/controllers/LeadController";
+import { Lead, SEDES, MEDIOS_CONTACTO, PRODUCTOS } from "@/features/landing/models/Lead";
+import { LeadController } from "@/features/landing/services/LeadController";
 import styles from "./LeadForm.module.css";
 
 export default function LeadForm() {

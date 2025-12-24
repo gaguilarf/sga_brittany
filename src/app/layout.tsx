@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import BackToTop from "@/components/BackToTop";
+import BackToTop from "@/shared/components/BackToTop";
 
 export const metadata: Metadata = {
   title: "Brittany Group - Aprende Inglés de Verdad",
