@@ -5,6 +5,9 @@ import BackToTop from "@/shared/components/BackToTop";
 export const metadata: Metadata = {
   title: "Brittany Group - Aprende Inglés de Verdad",
   description: "Programas de inglés para Pre Kids, Kids, Teens y Adultos.",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
