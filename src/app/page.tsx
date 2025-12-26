@@ -1,4 +1,5 @@
-import { Header, Footer } from '@/shared';
+// ARCHIVO: src/app/page.tsx
+import { Header, Footer } from "@/shared";
 import {
   Hero,
   SocialProof,
@@ -7,7 +8,7 @@ import {
   Testimonials,
   FAQ,
   CTAFinal,
-} from '@/features/landing';
+} from "@/features/landing";
 
 export default function Home() {
   return (
