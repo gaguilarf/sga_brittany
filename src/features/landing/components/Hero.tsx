@@ -7,7 +7,7 @@ export default function Hero() {
       {/* 1. Video: Debe estar fuera del div container para no empujar el texto */}
       <video autoPlay muted loop playsInline className={styles.videoBackground}>
         {/* IMPORTANTE: El video debe estar en la carpeta 'public' y llamarse así */}
-        <source src="/background_hero.mp4" type="video/mp4" />
+        <source src="/background.mp4" type="video/mp4" />
       </video>
 
       {/* 2. Capa de transparencia para que el texto se lea bien */}
