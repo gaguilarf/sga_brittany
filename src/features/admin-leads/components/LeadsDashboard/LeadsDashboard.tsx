@@ -2,13 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { Header, Footer } from "@/shared";
-import { getLeads, Lead } from "../../services/leadService";
+import { getLeads, Lead, patchLead } from "../../services/leadService";
 import styles from "./LeadsDashboard.module.css";
 import * as XLSX from "xlsx";
+import EditLeadModal from "../../components/EditLeadModal/EditLeadModal";
 
 export default function LeadsDashboard() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // --- ESTADOS PARA LA EDICIÓN Y NOTIFICACIÓN ---
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
 
   useEffect(() => {
     getLeads().then((data) => {
@@ -17,7 +26,6 @@ export default function LeadsDashboard() {
     });
   }, []);
 
-  // Función para formatear fecha y hora
   const formatDateTime = (dateString: string) => {
     const date = new Date(dateString);
     return {
@@ -30,9 +38,42 @@ export default function LeadsDashboard() {
     };
   };
 
-  // --- FUNCIÓN DE EXPORTACIÓN A EXCEL ---
+  // --- MANEJADORES DE EDICIÓN ---
+  const handleEditClick = (lead: Lead) => {
+    setSelectedLead(lead);
+    setIsModalOpen(true);
+  };
+
+  const handleSaveLead = async (updatedLead: Lead) => {
+    try {
+      // Limpiamos el objeto: quitamos ID y fechaRegistro del body del PATCH
+      const { id, fechaRegistro, ...rest } = updatedLead;
+      const payload = { ...rest, edad: Number(rest.edad) };
+
+      const savedLead = await patchLead(id, payload);
+
+      // Actualizamos estado local
+      setLeads((prev) => prev.map((l) => (l.id === id ? savedLead : l)));
+
+      // Notificación de éxito
+      setNotification({
+        message: "¡Lead actualizado con éxito!",
+        type: "success",
+      });
+
+      // Cerramos modal tras un breve delay
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setSelectedLead(null);
+        setNotification(null);
+      }, 2000);
+    } catch (error: any) {
+      setNotification({ message: error.message, type: "error" });
+      setTimeout(() => setNotification(null), 2000);
+    }
+  };
+
   const handleExportExcel = () => {
-    // 1. Preparamos los datos (limpiamos el ID y formateamos fechas)
     const dataToExport = leads.map((lead) => {
       const { fecha, hora } = formatDateTime(lead.fechaRegistro);
       return {
@@ -48,20 +89,15 @@ export default function LeadsDashboard() {
       };
     });
 
-    // 2. Creamos la hoja de trabajo (worksheet)
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
-
-    // 3. Creamos el libro de trabajo (workbook)
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Leads");
 
-    // 4. Ajustar el ancho de las columnas automáticamente (opcional)
     const maxWidths = Object.keys(dataToExport[0] || {}).map((key) => ({
-      wch: key.length + 10,
+      wch: key.length + 15,
     }));
     worksheet["!cols"] = maxWidths;
 
-    // 5. Descargar el archivo
     XLSX.writeFile(workbook, `Leads_Brittany_${new Date().getTime()}.xlsx`);
   };
 
@@ -72,13 +108,12 @@ export default function LeadsDashboard() {
         <div className={styles.topBar}>
           <h1 className={styles.title}>ADMINISTRACIÓN DE LEADS</h1>
           <div className={styles.buttonGroup}>
-            {/* Añadimos el botón de Excel junto al de PDF si lo tenías */}
             <button
               className={`btn btn-small btn-primary ${styles.export}`}
               onClick={handleExportExcel}
               disabled={leads.length === 0}
             >
-              EXPORTAR
+              EXPORTAR EXCEL
             </button>
           </div>
         </div>
@@ -98,7 +133,9 @@ export default function LeadsDashboard() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={6}>Cargando...</td>
+                  <td colSpan={6} className={styles.loadingText}>
+                    Cargando leads...
+                  </td>
                 </tr>
               ) : (
                 leads.map((lead) => {
@@ -113,10 +150,13 @@ export default function LeadsDashboard() {
                         {fecha} - {hora}
                       </td>
                       <td className={styles.actions}>
-                        <button className={styles.editBtn}>Editar</button>
-                        <button className={styles.deleteBtn}>
-                          Eliminar
-                        </button>{" "}
+                        <button
+                          className={styles.editBtn}
+                          onClick={() => handleEditClick(lead)}
+                        >
+                          Editar
+                        </button>
+                        {/*  <button className={styles.deleteBtn}>Eliminar</button> */}
                       </td>
                     </tr>
                   );
@@ -125,6 +165,22 @@ export default function LeadsDashboard() {
             </tbody>
           </table>
         </div>
+
+        {/* COMPONENTE DE NOTIFICACIÓN (Toast) */}
+        {notification && (
+          <div className={`${styles.toast} ${styles[notification.type]}`}>
+            {notification.message}
+          </div>
+        )}
+
+        {/* MODAL DE EDICIÓN */}
+        {isModalOpen && selectedLead && (
+          <EditLeadModal
+            lead={selectedLead}
+            onClose={() => setIsModalOpen(false)}
+            onSave={handleSaveLead}
+          />
+        )}
       </main>
       <Footer />
     </>
