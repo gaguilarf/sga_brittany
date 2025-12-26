@@ -78,7 +78,7 @@ export default function LeadsDashboard() {
               onClick={handleExportExcel}
               disabled={leads.length === 0}
             >
-              Descargar Excel (.xlsx)
+              EXPORTAR
             </button>
           </div>
         </div>
@@ -114,6 +114,9 @@ export default function LeadsDashboard() {
                       </td>
                       <td className={styles.actions}>
                         <button className={styles.editBtn}>Editar</button>
+                        <button className={styles.deleteBtn}>
+                          Eliminar
+                        </button>{" "}
                       </td>
                     </tr>
                   );
