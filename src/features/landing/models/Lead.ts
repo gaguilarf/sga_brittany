@@ -37,7 +37,7 @@ export type Sede =
   | "Arequipa - San José"
   | "Arequipa - Umacollo"
   | "Arequipa - Cayma"
-  | "Arequipa - Brittany Kids";
+  | "Arequipa - Bustamante Kids";
 
 export type MedioContacto =
   | "TikTok"
@@ -55,7 +55,7 @@ export const SEDES: Sede[] = [
   "Arequipa - San José",
   "Arequipa - Umacollo",
   "Arequipa - Cayma",
-  "Arequipa - Brittany Kids",
+  "Arequipa - Bustamante Kids",
 ];
 
 export const MEDIOS_CONTACTO: MedioContacto[] = [
