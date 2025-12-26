@@ -66,7 +66,7 @@ export default function LeadsDashboard() {
         setIsModalOpen(false);
         setSelectedLead(null);
         setNotification(null);
-      }, 2000);
+      }, 1000);
     } catch (error: any) {
       setNotification({ message: error.message, type: "error" });
       setTimeout(() => setNotification(null), 2000);
