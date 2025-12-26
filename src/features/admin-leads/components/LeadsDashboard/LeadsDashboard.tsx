@@ -156,7 +156,7 @@ export default function LeadsDashboard() {
                         >
                           Editar
                         </button>
-                        <button className={styles.deleteBtn}>Eliminar</button>
+                        {/*  <button className={styles.deleteBtn}>Eliminar</button> */}
                       </td>
                     </tr>
                   );
