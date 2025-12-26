@@ -33,10 +33,11 @@ export type Modalidad = "Virtual" | "Presencial";
 export type Sede =
   | "Lima - Miraflores"
   | "Lima - Lince"
-  | "Arequipa - José Luis Bustamante R."
+  | "Arequipa - Bustamante"
   | "Arequipa - San José"
   | "Arequipa - Umacollo"
-  | "Arequipa - Cayma";
+  | "Arequipa - Cayma"
+  | "Arequipa - Brittany Kids";
 
 export type MedioContacto =
   | "TikTok"
@@ -50,10 +51,11 @@ export type MedioContacto =
 export const SEDES: Sede[] = [
   "Lima - Miraflores",
   "Lima - Lince",
-  "Arequipa - José Luis Bustamante R.",
+  "Arequipa - Bustamante",
   "Arequipa - San José",
   "Arequipa - Umacollo",
   "Arequipa - Cayma",
+  "Arequipa - Brittany Kids",
 ];
 
 export const MEDIOS_CONTACTO: MedioContacto[] = [

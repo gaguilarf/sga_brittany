@@ -12,10 +12,11 @@ export default function Footer() {
         {
             ciudad: 'Arequipa',
             direcciones: [
-                { nombre: 'José Luis Bustamante R.', direccion: 'Av. EEUU (a media cuadra de la pizzería Presto) ', telefono: '(054) 691874' },
+                { nombre: 'Bustamante', direccion: 'Av. EEUU (a media cuadra de la pizzería Presto) ', telefono: '(054) 691874' },
                 { nombre: 'San José', direccion: 'Calle San José 105, frente a La Ibérica', telefono: '+51 928 200 102' },
                 { nombre: 'Umacollo', direccion: 'Calle María Nieves Bustamante 115, Umacollo (a 1/2 cuadra del parque de la    U. Católica)', telefono: '(054) 627563' },
                 { nombre: 'Cayma', direccion: 'Calle Los Arces 102 (a media cuada del paradero de Real Plaza)', telefono: '+51 957 167 441' },
+                { nombre: 'Brittany KIDS', direccion: 'Av. EEUU G-6', telefono: '(054) 691874' },
             ],
         },
     ];
