@@ -152,7 +152,7 @@ export default function Sidebar({ onToggle }: SidebarProps) {
           <Image
             src={isCollapsed ? "/logo_simple.png" : "/logo_azul.png"}
             alt="Brittany"
-            width={isCollapsed ? 40 : 150}
+            width={isCollapsed ? 40 : 170}
             height={40}
             className={styles.logo}
             priority

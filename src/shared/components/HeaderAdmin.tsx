@@ -44,7 +44,7 @@ export default function HeaderAdmin({
           {!hideLogo && (
             <div className={styles.logo}>
               <Image
-                src="/logo_azul.png"
+                src="/logo_azul_puro.png"
                 alt="Brittany Group"
                 width={150}
                 height={40}
