@@ -76,6 +76,7 @@ export default function AlumnosPage() {
   const router = useRouter();
 
   // States
+  const [alumnos, setAlumnos] = useState<Alumno[]>(ALL_ALUMNOS);
   const [searchTerm, setSearchTerm] = useState("");
   const [sedeFilter, setSedeFilter] = useState("Todas");
   const [estadoFilter, setEstadoFilter] = useState("Todos");
@@ -86,9 +87,12 @@ export default function AlumnosPage() {
     direction: "asc" | "desc";
   } | null>({ key: "nombre", direction: "asc" });
 
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState<Alumno | null>(null);
+
   // Filter Logic
   const filteredAlumnos = useMemo(() => {
-    return ALL_ALUMNOS.filter((alumno) => {
+    return alumnos.filter((alumno) => {
       const matchesSearch =
         alumno.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
         alumno.dni.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -100,7 +104,7 @@ export default function AlumnosPage() {
 
       return matchesSearch && matchesSede && matchesEstado;
     });
-  }, [searchTerm, sedeFilter, estadoFilter]);
+  }, [searchTerm, sedeFilter, estadoFilter, alumnos]);
 
   // Sort Logic
   const sortedAlumnos = useMemo(() => {
@@ -142,6 +146,47 @@ export default function AlumnosPage() {
       direction = "desc";
     }
     setSortConfig({ key, direction });
+  };
+
+  const startEditing = (alumno: Alumno) => {
+    setEditingId(alumno.id);
+    setEditForm({ ...alumno });
+  };
+
+  const handleCancel = () => {
+    setEditingId(null);
+    setEditForm(null);
+  };
+
+  const handleSave = () => {
+    if (editForm) {
+      setAlumnos((prev) =>
+        prev.map((a) => (a.id === editForm.id ? editForm : a))
+      );
+      setEditingId(null);
+      setEditForm(null);
+    }
+  };
+
+  const handleEditChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    if (editForm) {
+      if (name === "fechaIngreso") {
+        // Convertir YYYY-MM-DD a DD/MM/YYYY
+        const [year, month, day] = value.split("-");
+        setEditForm({ ...editForm, [name]: `${day}/${month}/${year}` });
+      } else {
+        setEditForm({ ...editForm, [name]: value });
+      }
+    }
+  };
+
+  // Helper para convertir DD/MM/YYYY a YYYY-MM-DD para el input date
+  const formatDateForInput = (dateStr: string) => {
+    const [day, month, year] = dateStr.split("/");
+    return `${year}-${month}-${day}`;
   };
 
   const goToPage = (page: number) => {
@@ -298,63 +343,181 @@ export default function AlumnosPage() {
               </tr>
             </thead>
             <tbody>
-              {paginatedAlumnos.map((alumno) => (
-                <tr key={alumno.id}>
-                  <td className={styles.nameCell}>
-                    <div>{alumno.nombre}</div>
-                    <div className={styles.emailSub}>{alumno.email}</div>
-                  </td>
-                  <td>{alumno.dni}</td>
-                  <td>{alumno.sede}</td>
-                  <td>
-                    <span
-                      className={`${styles.statusBadge} ${
-                        styles[alumno.estado.toLowerCase()]
-                      }`}
-                    >
-                      <span className={styles.statusDot}></span>
-                      {alumno.estado}
-                    </span>
-                  </td>
-                  <td>{alumno.fechaIngreso}</td>
-                  <td>
-                    <div className={styles.actions}>
-                      <button className={styles.btnEdit}>
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+              {paginatedAlumnos.map((alumno) => {
+                const isEditing = editingId === alumno.id;
+                const displayAlumno = isEditing ? editForm! : alumno;
+
+                return (
+                  <tr
+                    key={alumno.id}
+                    className={isEditing ? styles.editingRow : ""}
+                  >
+                    <td className={styles.nameCell}>
+                      {isEditing ? (
+                        <div className={styles.editInputsStack}>
+                          <input
+                            type="text"
+                            name="nombre"
+                            value={displayAlumno.nombre}
+                            onChange={handleEditChange}
+                            className={styles.inlineInput}
+                            placeholder="Nombre Completo"
+                          />
+                          <input
+                            type="email"
+                            name="email"
+                            value={displayAlumno.email}
+                            onChange={handleEditChange}
+                            className={styles.inlineInputSmall}
+                            placeholder="Correo electrónico"
+                          />
+                        </div>
+                      ) : (
+                        <>
+                          <div>{alumno.nombre}</div>
+                          <div className={styles.emailSub}>{alumno.email}</div>
+                        </>
+                      )}
+                    </td>
+                    <td>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          name="dni"
+                          value={displayAlumno.dni}
+                          onChange={handleEditChange}
+                          className={styles.inlineInput}
+                          placeholder="DNI"
+                        />
+                      ) : (
+                        alumno.dni
+                      )}
+                    </td>
+                    <td>
+                      {isEditing ? (
+                        <select
+                          name="sede"
+                          value={displayAlumno.sede}
+                          onChange={handleEditChange}
+                          className={styles.inlineSelect}
                         >
-                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                        </svg>
-                        Editar
-                      </button>
-                      <button className={styles.btnDetails}>
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                          <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                        Detalles
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                          <option value="Sede Central">Sede Central</option>
+                          <option value="Sede Norte">Sede Norte</option>
+                          <option value="Sede Sur">Sede Sur</option>
+                        </select>
+                      ) : (
+                        alumno.sede
+                      )}
+                    </td>
+                    <td>
+                      <span
+                        className={`${styles.statusBadge} ${
+                          styles[alumno.estado.toLowerCase()]
+                        }`}
+                      >
+                        <span className={styles.statusDot}></span>
+                        {alumno.estado}
+                      </span>
+                    </td>
+                    <td>
+                      {isEditing ? (
+                        <input
+                          type="date"
+                          name="fechaIngreso"
+                          value={formatDateForInput(displayAlumno.fechaIngreso)}
+                          onChange={handleEditChange}
+                          className={styles.inlineInput}
+                        />
+                      ) : (
+                        alumno.fechaIngreso
+                      )}
+                    </td>
+                    <td>
+                      <div className={styles.actions}>
+                        {isEditing ? (
+                          <>
+                            <button
+                              className={styles.btnSave}
+                              onClick={handleSave}
+                            >
+                              <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                              </svg>
+                              Guardar
+                            </button>
+                            <button
+                              className={styles.btnCancel}
+                              onClick={handleCancel}
+                            >
+                              <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                              </svg>
+                              Cancelar
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              className={styles.btnEdit}
+                              onClick={() => startEditing(alumno)}
+                            >
+                              <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                              </svg>
+                              Editar
+                            </button>
+                            <button className={styles.btnDetails}>
+                              <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                              </svg>
+                              Detalles
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
               {paginatedAlumnos.length === 0 && (
                 <tr>
                   <td colSpan={6} className={styles.emptyResults}>
