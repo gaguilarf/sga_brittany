@@ -58,9 +58,7 @@ export default function Header() {
             </a>
 
             <a
-              href="https://wa.me/51999999999"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/dashboard"
               className={`btn btn-small btn-primary ${styles.whatsappBtn}`}
             >
               Hablar por WhatsApp
