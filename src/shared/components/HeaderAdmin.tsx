@@ -8,24 +8,27 @@ interface HeaderAdminProps {
   adminName?: string;
   adminRole?: string;
   notificationCount?: number;
+  hideLogo?: boolean;
 }
 
 export default function HeaderAdmin({
   adminName = "Carlos Ruiz",
   adminRole = "Admin",
   notificationCount = 0,
+  hideLogo = false,
 }: HeaderAdminProps) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const menuItems = [
-    { label: "Matrículas", href: "/admin/matriculas", icon: "📋" },
-    { label: "Alumnos", href: "/admin/alumnos", icon: "👨‍🎓" },
-    { label: "Docentes", href: "/admin/docentes", icon: "👨‍🏫" },
-    { label: "Pagos", href: "/admin/pagos", icon: "💳" },
-    { label: "Leads", href: "/admin/leads", icon: "📊" },
-    { label: "Reportes", href: "/admin/reportes", icon: "📈" },
-    { label: "Sedes", href: "/admin/sedes", icon: "🏢" },
+    { label: "Matrículas", href: "/admin/matriculas", icon: "" },
+    { label: "Alumnos", href: "/admin/alumnos", icon: "" },
+    { label: "Docentes", href: "/admin/docentes", icon: "" },
+    { label: "Pagos", href: "/admin/pagos", icon: "" },
+    { label: "Leads", href: "/admin/leads", icon: "" },
+    { label: "Reportes", href: "/admin/reportes", icon: "" },
+    { label: "Sedes", href: "/admin/sedes", icon: "" },
   ];
 
   const handleLogout = () => {
@@ -38,18 +41,20 @@ export default function HeaderAdmin({
       <div className={styles.container}>
         <div className={styles.headerContent}>
           {/* Logo */}
-          <div className={styles.logo}>
-            <Image
-              src="/logo_blanco.png"
-              alt="Brittany Group"
-              width={150}
-              height={40}
-              priority
-              className={styles.logoImage}
-            />
-          </div>
+          {!hideLogo && (
+            <div className={styles.logo}>
+              <Image
+                src="/logo_azul.png"
+                alt="Brittany Group"
+                width={150}
+                height={40}
+                priority
+                className={styles.logoImage}
+              />
+            </div>
+          )}
 
-          {/* Navigation Menu */}
+          {/* Navigation Menu (Desktop) */}
           <nav className={styles.nav}>
             {menuItems.map((item) => (
               <a key={item.label} href={item.href} className={styles.navLink}>
@@ -60,6 +65,29 @@ export default function HeaderAdmin({
 
           {/* Right Section: Notifications & User */}
           <div className={styles.rightSection}>
+            {/* Hamburger Button (Mobile) */}
+            <button
+              className={styles.hamburgerBtn}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Menú"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                {isMobileMenuOpen ? (
+                  <path d="M18 6L6 18M6 6l12 12" />
+                ) : (
+                  <path d="M3 12h18M3 6h18M3 18h18" />
+                )}
+              </svg>
+            </button>
             {/* Notifications */}
             <div className={styles.notificationWrapper}>
               <button
@@ -207,6 +235,25 @@ export default function HeaderAdmin({
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Mobile Navigation Menu */}
+      <div
+        className={`${styles.mobileNav} ${
+          isMobileMenuOpen ? styles.mobileNavOpen : ""
+        }`}
+      >
+        {menuItems.map((item) => (
+          <a
+            key={item.label}
+            href={item.href}
+            className={styles.mobileNavLink}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            <span className={styles.mobileNavIcon}>{item.icon}</span>
+            {item.label}
+          </a>
+        ))}
       </div>
     </header>
   );
