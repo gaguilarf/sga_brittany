@@ -1,0 +1,231 @@
+.hero {
+  position: relative;
+  /* Indispensable */
+  padding: 4rem 0;
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.videoBackground {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Centra el video */
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: 0;
+  /* Al fondo */
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(245, 245, 245, 0.2) 100%);
+  z-index: 1;
+  /* Sobre el video */
+}
+
+.contentWrapper {
+  position: relative;
+  z-index: 2;
+  /* Sobre el overlay y el video */
+  width: 100%;
+}
+
+/* El resto de tus estilos (.title, .subtitle, etc.) se mantienen igual */
+.heroContent {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.mainTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* Alinea todo a la izquierda */
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Estilo para "APRENDE" */
+.badgeBlue {
+  background-color: var(--color-blue-primary);
+  color: white;
+  padding: 0.2rem 1rem;
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  border-radius: 4px;
+}
+
+/* Estilo para "Inglés de verdad" */
+.badgeWhite {
+  font-size: 3.5rem;
+  /* Más grande para dar jerarquía */
+  background-color: white;
+  color: var(--color-blue-primary);
+  padding: 1rem;
+  padding-bottom: 1.5rem;
+
+  font-weight: 900;
+  line-height: 1;
+  border-radius: 5px;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1);
+  /* Sombra plana tipo comic/moderno */
+
+  margin: 0.2rem 0.2;
+}
+
+/* Estilo para "EN 1 AÑO" */
+.badgeOrange {
+  background-color: var(--color-orange-primary);
+  color: white;
+  padding: 0.3rem 1.2rem;
+  font-size: 2rem;
+  font-weight: 900;
+  border-radius: 4px;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1);
+  /* Sombra plana tipo comic/moderno */
+}
+
+/* Bloque de Subtítulo y Descripción */
+.textBlock {
+  padding-left: 1.5rem;
+  margin-bottom: 2rem;
+  background-color: rgb(255, 255, 255);
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /* Sombra suave */
+  border-radius: 5px;
+}
+
+.title {
+  color: var(--color-blue-primary);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: var(--color-gray-700);
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.description {
+  font-size: 1rem;
+  color: var(--color-gray-600);
+  line-height: 1.6;
+}
+
+.benefits {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1rem 0;
+  max-width: 550px;
+}
+
+.benefit {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  /* Espacio entre el icono y el texto */
+  width: 100%;
+
+  /* --- AJUSTES DE ESPACIADO Y BORDES --- */
+  padding: 0.5rem 2rem;
+  /* Más aire por dentro (Arriba/Abajo Izquierda/Derecha) */
+  border-radius: 15px;
+  /* Bordes mucho más redondeados y modernos */
+
+  /* Fondo con efecto cristal (Glassmorphism) */
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  /* Desfoque sutil del video de fondo */
+  border: 1px solid rgba(255, 255, 255, 0.8);
+
+  /* Sombra suave para dar profundidad */
+  box-shadow: 0 8px 20px rgba(218, 158, 158, 0.04);
+
+  transition: all 0.3s ease;
+  min-width: 320px;
+  /* Evita que se vean muy flacas */
+}
+
+/* Efecto al pasar el mouse */
+.benefit:hover {
+  transform: translateY(-5px);
+  /* Flota un poco hacia arriba */
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+  border-color: var(--color-blue-primary);
+}
+
+.checkIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: var(--color-orange-primary);
+  color: var(--color-white);
+  border-radius: 12px;
+  border-radius: 50%;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ctaMobile {
+  display: flex;
+  margin-top: 1rem;
+}
+
+.heroForm {
+  position: sticky;
+  top: 100px;
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding: 3rem 0;
+  }
+
+  .heroContent {
+    grid-template-columns: 1fr 600px;
+    gap: 4rem;
+  }
+
+  .ctaMobile {
+    display: none;
+  }
+}
+
+@media (max-width: 1023px) {
+  .heroForm {
+    position: static;
+  }
+}
+
+/* Responsivo para móviles */
+@media (max-width: 768px) {
+  .textBlack {
+    font-size: 2.5rem;
+  }
+
+  .badgeOrange {
+    font-size: 1.5rem;
+  }
+}

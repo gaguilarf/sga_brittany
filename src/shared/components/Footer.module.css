@@ -1,0 +1,103 @@
+.footer {
+    background: var(--color-gray-900);
+    color: var(--color-white);
+    padding: 4rem 0 2rem;
+}
+
+.brand {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.brandTitle {
+    font-size: 2rem;
+    color: var(--color-white);
+    margin-bottom: 0.5rem;
+}
+
+.tagline {
+    color: var(--color-orange-primary);
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.sedesGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.ciudadSection {
+    border-top: 2px solid var(--color-gray-700);
+    padding-top: 2rem;
+}
+
+.ciudadTitle {
+    color: var(--color-orange-primary);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.sedesList {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.sede {
+    padding: 1rem;
+    background: var(--color-gray-800);
+    border-radius: var(--radius-md);
+}
+
+.sedeName {
+    font-weight: 700;
+    color: var(--color-white);
+    margin-bottom: 0.5rem;
+    font-size: 1.125rem;
+}
+
+.sedeInfo {
+    color: var(--color-gray-400);
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+
+.phone {
+    color: var(--color-blue-light);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.phone:hover {
+    color: var(--color-orange-primary);
+}
+
+.bottom {
+    border-top: 1px solid var(--color-gray-700);
+    padding-top: 2rem;
+    text-align: center;
+}
+
+.copyright {
+    color: var(--color-gray-400);
+    font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+    .sedesGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4rem;
+    }
+
+    .sedesList {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 1024px) {
+    .sedesList {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

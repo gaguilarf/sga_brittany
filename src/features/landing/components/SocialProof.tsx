@@ -1,0 +1,36 @@
+import { Users, Calendar, MapPin, MessageSquare } from "lucide-react";
+import styles from "./SocialProof.module.css";
+
+const stats = [
+    { value: "+10,000", label: "Alumnos egresados", icon: <Users size={32} /> },
+    {
+        value: "+25 años",
+        label: "Enseñando inglés",
+        icon: <Calendar size={32} />,
+    },
+    { value: "7 Sedes", label: "En Perú", icon: <MapPin size={32} /> },
+    {
+        value: "Clubes",
+        label: "de conversación",
+        icon: <MessageSquare size={32} />,
+    },
+];
+
+export default function SocialProof() {
+    return (
+        <section className={styles.socialProof}>
+            <div className="container">
+                <div className={styles.statsGrid}>
+                    {stats.map((stat, index) => (
+                        <div key={index} className={styles.stat}>
+                            {/* Contenedor del icono */}
+                            <div className={styles.iconContainer}>{stat.icon}</div>
+                            <div className={styles.statValue}>{stat.value}</div>
+                            <div className={styles.statLabel}>{stat.label}</div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
+}
