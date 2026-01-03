@@ -4,10 +4,13 @@ import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import styles from "./LoginPage.module.css";
+import { AuthController } from "../services/AuthController";
+import { useAuth } from "@/shared/contexts/AuthContext";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const { login } = useAuth();
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -18,17 +21,24 @@ export default function LoginPage() {
     setError("");
     setIsLoading(true);
 
-    // Simulación de autenticación
-    // TODO: Implementar lógica real de autenticación
-    setTimeout(() => {
-      if (email && password) {
+    try {
+      const response = await AuthController.login({ username, password });
+
+      if (response.success) {
+        // Actualizar el estado global de autenticación
+        if (response.data) {
+          login(response.data);
+        }
         // Redirigir al dashboard después del login exitoso
         router.push("/dashboard");
       } else {
-        setError("Por favor, completa todos los campos");
-        setIsLoading(false);
+        setError(response.message || "Error al iniciar sesión");
       }
-    }, 1000);
+    } catch (err) {
+      setError("Ocurrió un error inesperado. Por favor intenta de nuevo.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -53,8 +63,8 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className={styles.form}>
           {/* Email Field */}
           <div className={styles.formGroup}>
-            <label htmlFor="email" className={styles.label}>
-              Usuario / Correo
+            <label htmlFor="username" className={styles.label}>
+              Usuario
             </label>
             <div className={styles.inputWrapper}>
               <svg
@@ -73,10 +83,10 @@ export default function LoginPage() {
               </svg>
               <input
                 type="text"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="ej. administrador@brittany.edu"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="ej. administrador"
                 className={styles.input}
                 required
               />

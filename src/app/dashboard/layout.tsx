@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { HeaderAdmin, Sidebar } from "@/shared";
+import { useAuth } from "@/shared/contexts/AuthContext";
 import styles from "./layout.module.css";
 
 export default function DashboardLayout({
@@ -9,7 +11,23 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { user, isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isLoading, isAuthenticated, router]);
+
+  if (isLoading) {
+    return <div className={styles.loadingContainer}>Cargando...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <div className={styles.dashboardContainer}>
@@ -21,8 +39,8 @@ export default function DashboardLayout({
         }`}
       >
         <HeaderAdmin
-          adminName="Carlos Ruiz"
-          adminRole="Admin"
+          adminName={user?.fullname || "Usuario"}
+          adminRole={user?.roleName || "Admin"}
           notificationCount={3}
           hideLogo={!isSidebarCollapsed}
         />

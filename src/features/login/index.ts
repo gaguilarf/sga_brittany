@@ -5,7 +5,7 @@
 export { default as LoginPage } from "./components/LoginPage";
 
 // Models
-// export type { LoginCredentials } from './models/LoginModels';
+export type { LoginCredentials, User, AuthResponse } from "./models/AuthModels";
 
 // Services
-// export { authService } from './services/authService';
+export { AuthController } from "./services/AuthController";

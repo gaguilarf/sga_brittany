@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useAuth } from "@/shared/contexts/AuthContext";
 import styles from "./HeaderAdmin.module.css";
 
 interface HeaderAdminProps {
@@ -18,6 +19,7 @@ export default function HeaderAdmin({
   notificationCount = 0,
   hideLogo = false,
 }: HeaderAdminProps) {
+  const { logout } = useAuth();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -32,9 +34,12 @@ export default function HeaderAdmin({
     { label: "Sedes", href: "/admin/sedes", icon: "" },
   ];
 
-  const handleLogout = () => {
-    // Implementar lógica de logout
-    console.log("Logout");
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
   };
 
   return (
