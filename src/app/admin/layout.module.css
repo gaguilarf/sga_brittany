@@ -1,0 +1,33 @@
+.dashboardContainer {
+  display: flex;
+  min-height: 100vh;
+}
+
+.mainWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 280px;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 0;
+}
+
+.expanded {
+  margin-left: 80px;
+}
+
+.content {
+  flex: 1;
+  background: var(--color-gray-50);
+  padding: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .mainWrapper {
+    margin-left: 0;
+  }
+
+  .expanded {
+    margin-left: 0;
+  }
+}

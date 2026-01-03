@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Header, Footer } from "@/shared";
 import { getLeads, Lead, patchLead } from "../../services/leadService";
 import styles from "./LeadsDashboard.module.css";
 import * as XLSX from "xlsx";
@@ -103,7 +102,6 @@ export default function LeadsDashboard() {
 
   return (
     <>
-      <Header />
       <main className={styles.mainContainer}>
         <div className={styles.topBar}>
           <h1 className={styles.title}>ADMINISTRACIÓN DE LEADS</h1>
@@ -182,7 +180,6 @@ export default function LeadsDashboard() {
           />
         )}
       </main>
-      <Footer />
     </>
   );
 }
