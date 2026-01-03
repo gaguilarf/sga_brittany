@@ -31,7 +31,6 @@ export default function HeaderAdmin({
     { label: "Pagos", href: "/admin/pagos", icon: "" },
     { label: "Leads", href: "/admin/leads", icon: "" },
     { label: "Reportes", href: "/admin/reportes", icon: "" },
-    { label: "Sedes", href: "/admin/sedes", icon: "" },
   ];
 
   const handleLogout = async () => {

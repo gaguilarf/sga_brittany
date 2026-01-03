@@ -1,0 +1,45 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 120px);
+  padding: 2rem;
+}
+
+.card {
+  background: var(--color-white);
+  padding: 4rem 3rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  border: 1px solid var(--color-gray-100);
+}
+
+.icon {
+  margin-bottom: 2rem;
+  color: var(--color-blue-primary);
+  background: var(--color-blue-50);
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.title {
+  font-size: 1.75rem;
+  color: var(--color-blue-dark);
+  margin-bottom: 1rem;
+  font-weight: 800;
+}
+
+.message {
+  font-size: 1.1rem;
+  color: var(--color-gray-400);
+  line-height: 1.6;
+}
