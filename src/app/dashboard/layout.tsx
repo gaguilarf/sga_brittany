@@ -15,14 +15,19 @@ export default function DashboardLayout({
   const router = useRouter();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push("/login");
-    }
-  }, [isLoading, isAuthenticated, router]);
-
   if (isLoading) {
-    return <div className={styles.loadingContainer}>Cargando...</div>;
+    return (
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        Cargando...
+      </div>
+    );
   }
 
   if (!isAuthenticated) {

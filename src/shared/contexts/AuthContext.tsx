@@ -27,11 +27,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const savedUser = localStorage.getItem("auth_user");
     if (savedUser) {
       try {
-        setUser(JSON.parse(savedUser));
+        const parsedUser = JSON.parse(savedUser);
+        setUser(parsedUser);
       } catch (e) {
         localStorage.removeItem("auth_user");
       }
     }
+    // Always check session to verify validity, but the UI already has the user if cached
     checkSession();
   }, []);
 
@@ -42,10 +44,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     try {
       const userData = await AuthController.checkSession();
-      setUser(userData);
       if (userData) {
+        setUser(userData);
         localStorage.setItem("auth_user", JSON.stringify(userData));
       } else {
+        setUser(null);
         localStorage.removeItem("auth_user");
       }
     } catch (error) {
