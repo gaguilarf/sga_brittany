@@ -145,7 +145,7 @@ export const useMatricula = () => {
     }
   };
 
-  const validateStep = (step: number): boolean => {
+  const validateStep = async (step: number): Promise<boolean> => {
     const newErrors: Record<string, string> = {};
 
     if (step === 1) {
@@ -153,13 +153,34 @@ export const useMatricula = () => {
         newErrors.nombre = "El nombre completo es obligatorio.";
       if (!formData.dni) newErrors.dni = "El DNI es obligatorio.";
       else if (formData.dni.length < 8) newErrors.dni = "Mínimo 8 caracteres.";
-      if (!formData.fechaNacimiento)
+
+      // Check for duplicate DNI
+      if (formData.dni && formData.dni.length >= 8) {
+        try {
+          const existingStudent = await StudentService.getByDni(formData.dni);
+          // If student exists and it's not the currently selected student, show error
+          if (existingStudent && existingStudent.id !== formData.id) {
+            newErrors.dni = "Este DNI ya está registrado en el sistema.";
+          }
+        } catch (err) {
+          console.error("Error checking DNI:", err);
+        }
+      }
+
+      // Edad/FechaNacimiento: at least one is required
+      if (!formData.fechaNacimiento && !formData.edad) {
         newErrors.fechaNacimiento = "Fecha obligatoria.";
-      if (!formData.edad) newErrors.edad = "La edad es obligatoria.";
+        newErrors.edad = "La edad es obligatoria.";
+      }
+
       if (!formData.distrito)
         newErrors.distrito = "El distrito es obligatorio.";
-      if (!formData.celularApoderado)
+
+      // CelularAlumno/CelularApoderado: at least one is required
+      if (!formData.celularAlumno && !formData.celularApoderado) {
         newErrors.celularApoderado = "Celular apoderado obligatorio.";
+      }
+
       if (!formData.email) newErrors.email = "El correo es obligatorio.";
       else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
         newErrors.email = "Formato de correo inválido.";
@@ -199,8 +220,8 @@ export const useMatricula = () => {
     return true;
   };
 
-  const nextStep = () => {
-    if (validateStep(currentStep)) {
+  const nextStep = async () => {
+    if (await validateStep(currentStep)) {
       setCurrentStep((prev) => Math.min(prev + 1, 4));
     }
   };

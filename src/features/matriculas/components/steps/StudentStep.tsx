@@ -88,11 +88,12 @@ export const StudentStep = ({
                     className={`${styles.input} ${
                       errors.fechaNacimiento ? styles.invalid : ""
                     }`}
-                    required
                   />
                   <label htmlFor="fechaNacimiento" className={styles.label}>
                     Fecha de Nacimiento{" "}
-                    <span className={styles.required}>*</span>
+                    {!formData.edad && (
+                      <span className={styles.required}>*</span>
+                    )}
                   </label>
                   {errors.fechaNacimiento && (
                     <span className={styles.errorText}>
@@ -187,11 +188,12 @@ export const StudentStep = ({
                   className={`${styles.input} ${
                     errors.celularApoderado ? styles.invalid : ""
                   }`}
-                  required
                 />
                 <label htmlFor="celularApoderado" className={styles.label}>
                   Celular del Apoderado{" "}
-                  <span className={styles.required}>*</span>
+                  {!formData.celularAlumno && (
+                    <span className={styles.required}>*</span>
+                  )}
                 </label>
                 {errors.celularApoderado && (
                   <span className={styles.errorText}>
