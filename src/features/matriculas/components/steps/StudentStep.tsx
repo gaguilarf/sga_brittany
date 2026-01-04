@@ -8,6 +8,7 @@ interface Props {
   handleSearchStudent: () => void;
   loading: boolean;
   selectedStudent: Student | null;
+  isExistingStudent?: boolean;
 }
 
 export const StudentStep = ({
@@ -17,6 +18,7 @@ export const StudentStep = ({
   handleSearchStudent,
   loading,
   selectedStudent,
+  isExistingStudent = false,
 }: Props) => {
   return (
     <div className={styles.formGrid}>
@@ -40,6 +42,7 @@ export const StudentStep = ({
                       errors.nombre ? styles.invalid : ""
                     }`}
                     required
+                    disabled={isExistingStudent}
                   />
                   <label htmlFor="nombre" className={styles.label}>
                     Nombre Completo <span className={styles.required}>*</span>
@@ -64,6 +67,7 @@ export const StudentStep = ({
                       errors.dni ? styles.invalid : ""
                     }`}
                     required
+                    disabled={isExistingStudent}
                   />
                   <label htmlFor="dni" className={styles.label}>
                     DNI / Documento <span className={styles.required}>*</span>
@@ -88,6 +92,7 @@ export const StudentStep = ({
                     className={`${styles.input} ${
                       errors.fechaNacimiento ? styles.invalid : ""
                     }`}
+                    disabled={isExistingStudent}
                   />
                   <label htmlFor="fechaNacimiento" className={styles.label}>
                     Fecha de Nacimiento{" "}
@@ -118,6 +123,7 @@ export const StudentStep = ({
                     }`}
                     required
                     readOnly={!!formData.fechaNacimiento}
+                    disabled={isExistingStudent}
                   />
                   <label htmlFor="edad" className={styles.label}>
                     Edad <span className={styles.required}>*</span>
@@ -140,6 +146,7 @@ export const StudentStep = ({
                       errors.distrito ? styles.invalid : ""
                     }`}
                     required
+                    disabled={isExistingStudent}
                   />
                   <label htmlFor="distrito" className={styles.label}>
                     Distrito <span className={styles.required}>*</span>
@@ -170,6 +177,7 @@ export const StudentStep = ({
                   placeholder=" "
                   className={styles.input}
                   required
+                  disabled={isExistingStudent}
                 />
                 <label htmlFor="celularAlumno" className={styles.label}>
                   Celular del Alumno <span className={styles.required}>*</span>
@@ -188,6 +196,7 @@ export const StudentStep = ({
                   className={`${styles.input} ${
                     errors.celularApoderado ? styles.invalid : ""
                   }`}
+                  disabled={isExistingStudent}
                 />
                 <label htmlFor="celularApoderado" className={styles.label}>
                   Celular del Apoderado{" "}
@@ -215,6 +224,7 @@ export const StudentStep = ({
                     errors.email ? styles.invalid : ""
                   }`}
                   required
+                  disabled={isExistingStudent}
                 />
                 <label htmlFor="email" className={styles.label}>
                   Correo electrónico <span className={styles.required}>*</span>

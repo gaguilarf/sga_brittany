@@ -4,8 +4,31 @@
   padding: 2rem;
 }
 
-.pageHeader {
+.header {
   margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.btnReset {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--color-gray-500);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+}
+
+.btnReset:hover {
+  color: var(--color-blue-primary);
+  background: var(--color-blue-50);
 }
 
 .pageTitle {
@@ -760,5 +783,80 @@
   .btnRegister {
     width: 100%;
     justify-content: center;
+  }
+}
+
+/* Selection Screen */
+.selectionScreen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.selectionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.selectionCard {
+  background: var(--color-white);
+  border: 2px solid var(--color-gray-100);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+}
+
+.selectionCard:hover {
+  border-color: var(--color-blue-primary);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.selectionIcon {
+  width: 80px;
+  height: 80px;
+  background: var(--color-blue-50);
+  color: var(--color-blue-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
+}
+
+.selectionCard:hover .selectionIcon {
+  background: var(--color-blue-primary);
+  color: var(--color-white);
+  transform: scale(1.1);
+}
+
+.selectionContent h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.5rem;
+  color: var(--color-gray-800);
+  font-weight: 800;
+}
+
+.selectionContent p {
+  margin: 0;
+  color: var(--color-gray-500);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .selectionGrid {
+    grid-template-columns: 1fr;
   }
 }

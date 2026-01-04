@@ -14,6 +14,10 @@ export const useMatricula = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [enrollmentFlow, setEnrollmentFlow] = useState<
+    "selection" | "new" | "existing"
+  >("selection");
+  const [isExistingStudent, setIsExistingStudent] = useState(false);
 
   // Static data
   const [campuses, setCampuses] = useState<Campus[]>([]);
@@ -145,6 +149,63 @@ export const useMatricula = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const startNewEnrollment = () => {
+    setEnrollmentFlow("new");
+    setIsExistingStudent(false);
+    setCurrentStep(1);
+  };
+
+  const startExistingEnrollment = (student: Student) => {
+    setSelectedStudent(student);
+    setFormData((prev) => ({
+      ...prev,
+      id: student.id,
+      nombre: student.nombre,
+      dni: student.dni || "",
+      fechaNacimiento: student.fechaNacimiento || "",
+      edad: student.edad?.toString() || "",
+      distrito: student.distrito || "",
+      celularAlumno: student.celularAlumno || "",
+      celularApoderado: student.celularApoderado || "",
+      email: student.correo || "",
+    }));
+    setEnrollmentFlow("existing");
+    setIsExistingStudent(true);
+    setCurrentStep(2); // Jump to step 2 as requested
+  };
+
+  const resetFlow = () => {
+    setEnrollmentFlow("selection");
+    setIsExistingStudent(false);
+    setCurrentStep(1);
+    setSelectedStudent(null);
+    // Optionally reset formData here if needed, but the user didn't explicitly ask for it
+    // Most likely we want a fresh start
+    setFormData({
+      id: null,
+      nombre: "",
+      dni: "",
+      fechaNacimiento: "",
+      edad: "",
+      distrito: "",
+      celularAlumno: "",
+      celularApoderado: "",
+      email: "",
+      campusId: "",
+      planId: "",
+      modalidad: "Virtual",
+      horario: "",
+      nivel: "",
+      tipoInscripcion: "",
+      payments: [{ tipo: "", metodo: "", monto: "" }],
+      numeroBoleta: "",
+      diaClase: "",
+      horaInicio: "",
+      horaFin: "",
+    });
+    setErrors({});
   };
 
   // Payment management functions
@@ -297,7 +358,7 @@ export const useMatricula = () => {
       let studentId = formData.id;
 
       // 1. Check if student exists (Idempotency)
-      if (!studentId) {
+      if (!isExistingStudent && !studentId) {
         // Try to find by DNI first to avoid "Already exists" error on retry
         const existingStudent = await StudentService.getByDni(
           formData.dni
@@ -400,5 +461,10 @@ export const useMatricula = () => {
     nextStep,
     prevStep,
     handleFinalAction,
+    enrollmentFlow,
+    isExistingStudent,
+    startNewEnrollment,
+    startExistingEnrollment,
+    resetFlow,
   };
 };
