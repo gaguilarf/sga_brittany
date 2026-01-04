@@ -71,3 +71,25 @@ export interface EnrollmentResponse {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface CreatePaymentDto {
+  enrollmentId: number;
+  monto: number;
+  tipo: string;
+  metodo: string;
+  numeroBoleta: string;
+  fechaPago: string;
+  campusId: number;
+}
+
+export interface PaymentResponse {
+  id: number;
+  enrollmentId: number;
+  monto: number;
+  tipo: string;
+  metodo: string;
+  numeroBoleta: string;
+  fechaPago: string;
+  campusId: number;
+  createdAt: string;
+}
