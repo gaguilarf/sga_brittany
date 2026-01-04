@@ -149,6 +149,9 @@ export const useMatricula = () => {
         newErrors.distrito = "El distrito es obligatorio.";
       if (!formData.celularApoderado)
         newErrors.celularApoderado = "Celular apoderado obligatorio.";
+      if (!formData.email) newErrors.email = "El correo es obligatorio.";
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
+        newErrors.email = "Formato de correo inválido.";
     }
 
     if (step === 2) {

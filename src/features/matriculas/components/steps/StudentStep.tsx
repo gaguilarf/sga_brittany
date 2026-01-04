@@ -71,14 +71,7 @@ export const StudentStep = ({
                   {errors.dni && (
                     <span className={styles.errorText}>{errors.dni}</span>
                   )}
-                  <button
-                    type="button"
-                    className={styles.searchBtn}
-                    onClick={handleSearchStudent}
-                    disabled={loading || formData.dni?.length < 8}
-                  >
-                    {loading ? "..." : "🔍"}
-                  </button>
+
                   {selectedStudent && (
                     <span className={styles.checkIcon}>✓</span>
                   )}
@@ -216,14 +209,18 @@ export const StudentStep = ({
                   onChange={handleChange}
                   type="email"
                   placeholder=" "
-                  className={styles.input}
-                  required={formData.modalidad === "Virtual"}
+                  className={`${styles.input} ${
+                    errors.email ? styles.invalid : ""
+                  }`}
+                  required
                 />
                 <label htmlFor="email" className={styles.label}>
-                  Correo electrónico{" "}
-                  {formData.modalidad === "Virtual" ? "*" : "(Opcional)"}
+                  Correo electrónico <span className={styles.required}>*</span>
                 </label>
-                {formData.email?.includes("@") && (
+                {errors.email && (
+                  <span className={styles.errorText}>{errors.email}</span>
+                )}
+                {formData.email?.includes("@") && !errors.email && (
                   <span className={styles.checkIcon}>✓</span>
                 )}
               </div>
