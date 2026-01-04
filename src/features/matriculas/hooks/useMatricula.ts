@@ -12,6 +12,7 @@ export const useMatricula = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Static data
@@ -238,7 +239,6 @@ export const useMatricula = () => {
       }
 
       // 2. Create Enrollment
-      // Ideally we should check if enrollment exists for this period, but for now we proceed.
       const enrollment = await EnrollmentService.create({
         studentId: studentId!,
         campusId: parseInt(formData.campusId) || 0,
@@ -255,10 +255,8 @@ export const useMatricula = () => {
       });
 
       // 3. Create Payment
-      // Strict ISO 8601 format: YYYY-MM-DDTHH:mm:ssZ
       const now = new Date();
       // Remove milliseconds by splitting at period and appending Z
-      // Example: 2023-10-05T14:48:00.000Z -> 2023-10-05T14:48:00Z
       const isoDate = now.toISOString().split(".")[0] + "Z";
 
       const paymentPayload = {
@@ -275,11 +273,14 @@ export const useMatricula = () => {
 
       await PaymentService.create(paymentPayload);
 
-      alert("Matrícula y Pago registrados con éxito");
-      window.location.href = "/admin/dashboard";
+      setSuccess("¡Matrícula y Pago registrados con éxito!");
+
+      // Redirect after delay
+      setTimeout(() => {
+        window.location.href = "/admin/dashboard";
+      }, 1000); // 3 seconds delay for user to read the message
     } catch (err: any) {
       console.error(err);
-      // Show more detailed error if available
       let message =
         err.response?.data?.message ||
         err.message ||
@@ -298,6 +299,8 @@ export const useMatricula = () => {
     currentStep,
     loading,
     error,
+    success,
+    setSuccess,
     errors,
     campuses,
     plans,

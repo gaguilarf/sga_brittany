@@ -6,6 +6,7 @@ import { StudentStep } from "@/features/matriculas/components/steps/StudentStep"
 import { ConfigurationStep } from "@/features/matriculas/components/steps/ConfigurationStep";
 import { PaymentStep } from "@/features/matriculas/components/steps/PaymentStep";
 import { ConfirmationStep } from "@/features/matriculas/components/steps/ConfirmationStep";
+import Toast from "@/shared/components/Toast";
 
 export default function MatriculasPage() {
   const {
@@ -22,11 +23,20 @@ export default function MatriculasPage() {
     nextStep,
     prevStep,
     handleFinalAction,
+    success,
+    setSuccess,
   } = useMatricula();
 
   return (
     <div className={styles.matriculasContainer}>
-      <header className={styles.pageHeader}>
+      {success && (
+        <Toast
+          message={success}
+          type="success"
+          onClose={() => setSuccess(null)}
+        />
+      )}
+      <header className={styles.header}>
         <h1 className={styles.pageTitle}>Registro de Matrícula</h1>
         <p className={styles.pageDescription}>
           {currentStep === 1 && "Paso 1: Datos del Estudiante."}
