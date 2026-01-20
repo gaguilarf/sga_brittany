@@ -1,6 +1,6 @@
 .mainContainer {
   padding: 2rem;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   min-height: 80vh;
 }
@@ -15,13 +15,19 @@
 .title {
   color: var(--color-blue-primary);
   font-size: 2rem;
+  font-weight: 750;
+  margin: 0;
 }
 
 .tableWrapper {
-  overflow-x: auto; /* Para que sea responsiva en móviles */
-  border: 2px solid var(--color-blue-primary);
-  border-radius: 15px;
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
   background: white;
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.05),
+    0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  overflow: hidden; /* Ensure rounded corners clip children */
 }
 
 .table {
@@ -49,6 +55,54 @@
   gap: 0.5rem;
 }
 
+.buttonGroup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.viewToggleBtn,
+.exportBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.viewToggleBtn {
+  background: var(--color-white);
+  color: var(--color-blue-primary);
+  border: 2px solid var(--color-blue-primary);
+}
+
+.viewToggleBtn:hover {
+  background: var(--color-blue-primary);
+  color: var(--color-white);
+  transform: translateY(-2px);
+}
+
+.exportBtn {
+  background: var(--color-orange-primary);
+  color: var(--color-white);
+  border: none;
+}
+
+.exportBtn:hover:not(:disabled) {
+  background: var(--color-orange-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 142, 21, 0.2);
+}
+
+.exportBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .editBtn,
 .deleteBtn {
   padding: 0.4rem 0.8rem;
@@ -65,48 +119,106 @@
   color: white;
 }
 
-.deleteBtn {
-  border-color: #ff4d4d;
-  color: #ff4d4d;
-}
-
-.deleteBtn:hover {
-  background: #ff4d4d;
-  color: white;
-}
-
-.exportBtn {
-  white-space: nowrap;
-}
-
-.toast {
-  position: fixed;
-  top: 2rem;
-  right: 2rem;
-  padding: 1rem 2rem;
+/* Filters */
+.filterBar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  background: white;
+  padding: 1.25rem;
   border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+.filterGroup label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--color-blue-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+}
+
+.searchInput,
+.filterSelect {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #d1d5db;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  width: 100%;
+  transition: all 0.2s;
+}
+
+.searchInput:focus,
+.filterSelect:focus {
+  outline: none;
+  border-color: var(--color-blue-primary);
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.table th {
+  background-color: var(--color-blue-primary);
   color: white;
+  padding: 1rem;
   font-weight: 600;
-  z-index: 9999;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  min-width: 300px;
+  border: none;
+}
+
+/* Sortable Headers */
+.sortableHeader {
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s;
+}
+
+.sortableHeader:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.headerContent {
   display: flex;
   align-items: center;
-  justify-content: center;
-  animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  gap: 0.5rem;
+  width: 100%;
 }
 
-.success {
-  background-color: #10b981; /* Verde esmeralda */
-  border-left: 6px solid #059669;
+.sortIcon {
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto; /* Push icon to the right if needed, or keep it near text */
 }
 
-.error {
-  background-color: #ef4444; /* Rojo */
-  border-left: 6px solid #b91c1c;
+/* Status tags for Advisor */
+.statusLanding {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  border: 1px solid #d1d5db;
 }
 
-/* Animación para que entre desde la derecha */
+.statusInternal {
+  background-color: #ecfdf5;
+  color: #047857;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid #10b981;
+}
+
 @keyframes slideIn {
   from {
     transform: translateX(120%);

@@ -33,7 +33,7 @@ export type Modalidad = "Virtual" | "Presencial";
 export type Sede =
   | "Lima - Miraflores"
   | "Lima - Lince"
-  | "Arequipa - Bustamante"
+  | "Arequipa - José Luis Bustamante R."
   | "Arequipa - San José"
   | "Arequipa - Umacollo"
   | "Arequipa - Cayma"
@@ -51,7 +51,7 @@ export type MedioContacto =
 export const SEDES: Sede[] = [
   "Lima - Miraflores",
   "Lima - Lince",
-  "Arequipa - Bustamante",
+  "Arequipa - José Luis Bustamante R.",
   "Arequipa - San José",
   "Arequipa - Umacollo",
   "Arequipa - Cayma",
