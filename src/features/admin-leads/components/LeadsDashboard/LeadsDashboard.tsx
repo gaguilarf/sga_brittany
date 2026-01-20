@@ -78,7 +78,7 @@ export default function LeadsDashboard() {
 
   const getSortIcon = (key: keyof Lead | "fechaRegistro") => {
     if (sortConfig.key !== key)
-      return <ChevronDown size={14} style={{ opacity: 0.3 }} />;
+      return <ChevronDown size={14} style={{ opacity: 0.5 }} />;
     return sortConfig.direction === "asc" ? (
       <ChevronUp size={14} />
     ) : (
