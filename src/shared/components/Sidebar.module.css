@@ -1,13 +1,12 @@
 .sidebar {
   height: 100vh;
-  background: var(
-    --color-white
-  ); /* Expanded state - White background as per logo_azul requirement */
-  border-right: 1px solid var(--color-gray-200);
+  background: var(--color-blue-primary); /* Keep Blue in all states */
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
   width: 280px;
   display: flex;
   flex-direction: column;
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+  transition:
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     background-color 0.3s ease;
   position: fixed;
   left: 0;
@@ -18,9 +17,8 @@
 
 .collapsed {
   width: 80px;
-  background: var(
-    --color-blue-primary
-  ); /* Collapsed state - Blue background as per logo_blanco requirement */
+  background: var(--color-blue-primary); /* explicit for safety */
+  /* border-right: 1px solid var(--color-gray-200); */ /* Removed as per instruction */
 }
 
 .sidebarHeader {
@@ -29,7 +27,7 @@
   align-items: center;
   justify-content: center;
   padding: 0 1.5rem;
-  border-bottom: 1px solid var(--color-gray-100);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .collapsed .sidebarHeader {
@@ -41,22 +39,28 @@
 .logoContainer {
   display: flex;
   align-items: center;
-  overflow: hidden;
+  justify-content: flex-start;
   transition: all 0.3s ease;
+  width: 100%;
 }
 
 .collapsed .logoContainer {
-  width: 40px;
+  justify-content: center;
 }
 
 .logo {
   height: auto;
   object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.02);
 }
 
 .toggleBtn {
-  background: var(--color-gray-100);
-  color: var(--color-gray-600);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
   border: none;
   border-radius: 50%;
   width: 32px;
@@ -79,8 +83,8 @@
 }
 
 .toggleBtn:hover {
-  background: var(--color-blue-primary);
-  color: var(--color-white);
+  background: var(--color-white);
+  color: var(--color-blue-primary);
 }
 
 .sidebarNav {
@@ -100,37 +104,67 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0.875rem 1rem;
+  padding: 0.75rem 1.25rem;
   border-radius: var(--radius-lg);
-  color: var(--color-gray-600);
-  transition: all 0.2s ease;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   text-decoration: none;
+  font-weight: 500;
+  margin: 0.2rem 0;
 }
 
 .collapsed .navItem {
   padding: 1rem;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .navItem:hover {
-  background: var(--color-gray-50);
-  color: var(--color-blue-primary);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  transform: translateX(4px);
 }
 
 .collapsed .navItem:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--color-white);
+  transform: scale(1.05);
 }
 
 .active {
-  background: var(--color-blue-primary);
-  color: var(--color-white);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  color: white !important;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Orange indicator bar for active item */
+.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20%;
+  height: 60%;
+  width: 4px;
+  background-color: var(--color-orange-primary);
+  border-radius: 0 4px 4px 0;
 }
 
 .collapsed .active {
   background: var(--color-white);
+  color: var(--color-blue-primary) !important;
+}
+
+.collapsed .active::before {
+  display: none;
+}
+
+.navItem:hover .icon {
+  color: white;
+  transform: rotate(-5deg) scale(1.1);
+}
+
+.collapsed .active:hover .icon {
   color: var(--color-blue-primary);
 }
 
@@ -139,6 +173,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: all 0.3s ease;
 }
 
 .label {
