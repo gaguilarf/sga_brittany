@@ -53,6 +53,28 @@
   color: #94a3b8;
 }
 
+.clearSearchBtn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.clearSearchBtn:hover {
+  background-color: #f1f5f9;
+  color: #ef4444;
+}
+
 .sectionCard {
   background: var(--color-white);
   border-radius: var(--radius-lg);
@@ -105,31 +127,79 @@
 
 .debtsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  /* Changed to 1 column for list view look, or explicit minmax for cards */
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+/* Updated Debt Item Styles */
+.debtItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #fff;
+  transition: all 0.2s ease;
+}
+
+.debtItem:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.debtItemSelected {
+  border-color: #2563eb;
+  background-color: #eff6ff;
+  box-shadow: 0 0 0 1px #2563eb;
+}
+
+.debtContentWrapper {
+  display: flex;
+  align-items: center;
   gap: 1rem;
 }
 
-.debtItem {
+.debtCheckbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #2563eb;
+}
+
+.debtInfo {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 4px;
 }
 
 .debtLabel {
-  font-size: 0.875rem;
-  color: #64748b;
+  font-size: 0.95rem;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.debtStatusTag {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  width: fit-content;
 }
 
 .debtValue {
   font-size: 1rem;
-  font-weight: 600;
-  color: #1e293b;
+  font-weight: 700;
+  color: #64748b;
 }
 
 .debtValueHighlight {
   color: #ef4444;
 }
 
+/* Form Styles */
 .formSection {
   background: #fff;
   border-radius: 16px;
@@ -191,6 +261,15 @@
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.redirectMessage {
+  grid-column: 1 / -1;
+  background-color: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+  padding: 1rem;
+  color: #1e40af;
 }
 
 .methodSection {
@@ -334,4 +413,18 @@
 
 .btnSubmit:active {
   transform: translateY(0);
+}
+
+/* Spinner */
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

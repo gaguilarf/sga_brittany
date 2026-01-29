@@ -146,8 +146,7 @@ export const useMatricula = () => {
             // If it's a product enrollment redirection, jump to step 2
             if (typeParam === "PRODUCT") {
               setCurrentStep(2);
-              // We might want to set enrollmentFlow to 'existing' strictly for UI logic if needed
-              // setEnrollmentFlow("existing");
+              setEnrollmentFlow("existing");
             }
           }
         } catch (err) {
