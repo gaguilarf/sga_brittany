@@ -1,6 +1,7 @@
 export const PAYMENT_TYPES = [
   "Inscripción",
-  "Mensualidad",
   "Materiales",
+  "Mensualidad",
+  "Mensualidad Adelantada",
   "Otro",
 ];

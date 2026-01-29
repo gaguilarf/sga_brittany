@@ -1,5 +1,6 @@
 import styles from "../page.module.css";
 import { PAYMENT_TYPES } from "../../constants/PaymentTypes";
+import { Calendar, Plus, Trash2 } from "lucide-react";
 
 interface Props {
   formData: any;
@@ -8,6 +9,16 @@ interface Props {
   handlePaymentChange: (index: number, field: string, value: string) => void;
   addPayment: () => void;
   removePayment: (index: number) => void;
+  plans: any[];
+  campusPrices: any[];
+  addPrepaymentMonth: (paymentIndex: number) => void;
+  removePrepaymentMonth: (paymentIndex: number, monthIndex: number) => void;
+  updatePrepaymentMonth: (
+    paymentIndex: number,
+    monthIndex: number,
+    field: string,
+    value: any,
+  ) => void;
 }
 
 export const PaymentStep = ({
@@ -17,11 +28,62 @@ export const PaymentStep = ({
   handlePaymentChange,
   addPayment,
   removePayment,
+  plans,
+  campusPrices,
+  addPrepaymentMonth,
+  removePrepaymentMonth,
+  updatePrepaymentMonth,
 }: Props) => {
-  // Get all currently selected payment types
+  // Get all currently selected payment types across all payment rows
   const selectedTypes = formData.payments
     .map((p: any) => p.tipo)
     .filter(Boolean);
+
+  const hasMensualidad = selectedTypes.includes("Mensualidad");
+  const hasMensualidadAdelantada = selectedTypes.includes(
+    "Mensualidad Adelantada",
+  );
+
+  const getMonthOptions = () => {
+    const plan = plans.find((p) => p.id === parseInt(formData.planId));
+    const duracion = plan?.duracionMeses || 12;
+
+    const monthsArray: Array<{ value: string; label: string }> = [];
+    const startDate = new Date();
+    startDate.setMonth(startDate.getMonth() + 1);
+
+    const monthNames = [
+      "ENERO",
+      "FEBRERO",
+      "MARZO",
+      "ABRIL",
+      "MAYO",
+      "JUNIO",
+      "JULIO",
+      "AGOSTO",
+      "SEPTIEMBRE",
+      "OCTUBRE",
+      "NOVIEMBRE",
+      "DICIEMBRE",
+    ];
+
+    for (let i = 0; i < duracion; i++) {
+      const current = new Date(startDate);
+      current.setMonth(startDate.getMonth() + i);
+      const monthValue = `${current.getFullYear()}-${String(
+        current.getMonth() + 1,
+      ).padStart(2, "0")}`;
+      const label = `${monthNames[current.getMonth()]} ${current.getFullYear()}`;
+      monthsArray.push({ value: monthValue, label });
+    }
+    return monthsArray;
+  };
+
+  const monthOptions = getMonthOptions();
+  const currentPlanConfig = campusPrices.find(
+    (cp) => cp.planId === parseInt(formData.planId),
+  );
+  const suggestedMonthlyPrice = currentPlanConfig?.precioMensualidad || 0;
 
   return (
     <div className={styles.formGrid}>
@@ -73,10 +135,35 @@ export const PaymentStep = ({
 
               {formData.payments.map((payment: any, index: number) => {
                 // Determine which options to show for this specific row
-                const availableTypes = PAYMENT_TYPES.filter(
-                  (type) =>
-                    !selectedTypes.includes(type) || type === payment.tipo,
-                );
+                const isPrepayment = payment.tipo === "Mensualidad Adelantada";
+                const isMensualidad = payment.tipo === "Mensualidad";
+
+                const availableTypes = PAYMENT_TYPES.filter((type) => {
+                  // If current type is already selected in THIS row, keep it
+                  if (type === payment.tipo) return true;
+
+                  // Special case: Allow swapping between Mensualidad and Mensualidad Adelantada in the SAME row
+                  if (
+                    (type === "Mensualidad" &&
+                      payment.tipo === "Mensualidad Adelantada") ||
+                    (type === "Mensualidad Adelantada" &&
+                      payment.tipo === "Mensualidad")
+                  ) {
+                    return true;
+                  }
+
+                  // Unique Types: Don't allow selecting same type in multiple rows (except Otro)
+                  if (type !== "Otro" && selectedTypes.includes(type))
+                    return false;
+
+                  // Exclusivity: If other rows have Mensualidad, hide Mensualidad Adelantada and vice-versa
+                  if (type === "Mensualidad Adelantada" && hasMensualidad)
+                    return false;
+                  if (type === "Mensualidad" && hasMensualidadAdelantada)
+                    return false;
+
+                  return true;
+                });
 
                 return (
                   <div key={index} className={styles.paymentItemCard}>
@@ -183,6 +270,7 @@ export const PaymentStep = ({
                                 : ""
                             }`}
                             required
+                            readOnly={isPrepayment}
                           />
                           <label className={styles.labelFloating}>
                             Monto S/. <span className={styles.required}>*</span>
@@ -195,6 +283,101 @@ export const PaymentStep = ({
                         </div>
                       </div>
                     </div>
+
+                    {isPrepayment && (
+                      <div className={styles.prepaymentSection}>
+                        <div className={styles.prepaymentHeader}>
+                          <div className={styles.prepaymentTitle}>
+                            <Calendar size={18} />
+                            <span>Gestión de Mensualidades Adelantadas</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => addPrepaymentMonth(index)}
+                            className={styles.addMonthBtn}
+                          >
+                            <Plus size={16} />
+                            Agregar mes
+                          </button>
+                        </div>
+
+                        <div className={styles.monthsTable}>
+                          {payment.mesesAdelantados &&
+                          payment.mesesAdelantados.length > 0 ? (
+                            <div className={styles.monthsListContainer}>
+                              {payment.mesesAdelantados.map(
+                                (m: any, mIdx: number) => {
+                                  const [year, month] = m.mes
+                                    .split("-")
+                                    .map(Number);
+                                  const monthNames = [
+                                    "ENERO",
+                                    "FEBRERO",
+                                    "MARZO",
+                                    "ABRIL",
+                                    "MAYO",
+                                    "JUNIO",
+                                    "JULIO",
+                                    "AGOSTO",
+                                    "SEPTIEMBRE",
+                                    "OCTUBRE",
+                                    "NOVIEMBRE",
+                                    "DICIEMBRE",
+                                  ];
+                                  const label = `${monthNames[month - 1]} ${year}`;
+
+                                  return (
+                                    <div key={mIdx} className={styles.monthRow}>
+                                      <div className={styles.monthCol}>
+                                        <div className={styles.readOnlyMonth}>
+                                          {label}
+                                        </div>
+                                      </div>
+                                      <div className={styles.priceCol}>
+                                        <div
+                                          className={styles.priceInputWrapper}
+                                        >
+                                          <span>S/.</span>
+                                          <input
+                                            type="number"
+                                            value={m.monto}
+                                            onChange={(e) =>
+                                              updatePrepaymentMonth(
+                                                index,
+                                                mIdx,
+                                                "monto",
+                                                e.target.value,
+                                              )
+                                            }
+                                            className={styles.monthPriceInput}
+                                            placeholder="0.00"
+                                          />
+                                        </div>
+                                      </div>
+                                      <div className={styles.actionCol}>
+                                        <button
+                                          type="button"
+                                          onClick={() =>
+                                            removePrepaymentMonth(index, mIdx)
+                                          }
+                                          className={styles.deleteMonthBtn}
+                                        >
+                                          <Trash2 size={16} />
+                                        </button>
+                                      </div>
+                                    </div>
+                                  );
+                                },
+                              )}
+                            </div>
+                          ) : (
+                            <div className={styles.emptyMonths}>
+                              <p>No se han agregado meses todavía.</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               })}

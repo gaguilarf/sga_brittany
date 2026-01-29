@@ -74,10 +74,13 @@ export const useMatricula = () => {
     examDate: "",
 
     // Step 4: Pago (múltiples pagos)
-    payments: [{ tipo: "", metodo: "", monto: "" }] as Array<{
+    payments: [
+      { tipo: "", metodo: "", monto: "", mesesAdelantados: [] },
+    ] as Array<{
       tipo: string;
       metodo: string;
       monto: string;
+      mesesAdelantados?: Array<{ mes: string; monto: number }>;
     }>,
     numeroBoleta: "",
 
@@ -381,7 +384,7 @@ export const useMatricula = () => {
       enrollmentType: "" as "PLAN" | "PRODUCT" | "",
       productId: "",
       examDate: "",
-      payments: [{ tipo: "", metodo: "", monto: "" }],
+      payments: [{ tipo: "", metodo: "", monto: "", mesesAdelantados: [] }],
       numeroBoleta: "",
       diaClase: "",
       horaInicio: "",
@@ -395,7 +398,10 @@ export const useMatricula = () => {
   const addPayment = () => {
     setFormData((prev) => ({
       ...prev,
-      payments: [...prev.payments, { tipo: "", metodo: "", monto: "" }],
+      payments: [
+        ...prev.payments,
+        { tipo: "", metodo: "", monto: "", mesesAdelantados: [] },
+      ],
     }));
   };
 
@@ -405,32 +411,67 @@ export const useMatricula = () => {
       payments: prev.payments.filter((_, i) => i !== index),
     }));
   };
-
   const handlePaymentChange = (index: number, field: string, value: string) => {
+    // if tipo changes, find and set the price automatically
     setFormData((prev) => {
       const updatedPayments = [...prev.payments];
       let updatedMonto = updatedPayments[index].monto;
+      let updatedTipo = value;
+
+      // if tipo changes to something else than Mensualidad Adelantada, clear months
+      if (field === "tipo") {
+        if (value !== "Mensualidad Adelantada") {
+          updatedPayments[index].mesesAdelantados = [];
+        }
+
+        // Mutual Exclusivity: Mensualidad vs Mensualidad Adelantada
+        if (value === "Mensualidad Adelantada") {
+          // Check if any other payment is "Mensualidad" and clear it
+          updatedPayments.forEach((p, i) => {
+            if (i !== index && p.tipo === "Mensualidad") {
+              p.tipo = "";
+              p.monto = "";
+            }
+          });
+        } else if (value === "Mensualidad") {
+          // Check if any other payment is "Mensualidad Adelantada" and clear it
+          updatedPayments.forEach((p, i) => {
+            if (i !== index && p.tipo === "Mensualidad Adelantada") {
+              p.tipo = "";
+              p.monto = "";
+              p.mesesAdelantados = [];
+            }
+          });
+        }
+      }
 
       // if tipo changes, find and set the price automatically
-      if (field === "tipo" && value && prev.planId) {
+      if (field === "tipo" && updatedTipo && prev.planId) {
         const planId = parseInt(prev.planId);
         const config = campusPrices.find((cp) => cp.planId === planId);
 
         if (config) {
-          if (value === "Inscripción") {
+          if (updatedTipo === "Inscripción") {
             updatedMonto = config.precioInscripcion.toString();
-          } else if (value === "Materiales") {
+          } else if (updatedTipo === "Materiales") {
             updatedMonto = config.precioMateriales.toString();
-          } else if (value === "Mensualidad") {
+          } else if (updatedTipo === "Mensualidad") {
             updatedMonto = config.precioMensualidad.toString();
           }
         }
       }
 
+      // If editing monto directly, use the new value
+      if (field === "monto") {
+        updatedMonto = value;
+      }
+
       updatedPayments[index] = {
         ...updatedPayments[index],
         [field]: value,
-        monto: updatedMonto,
+        ...(field === "tipo" || field === "monto"
+          ? { monto: updatedMonto }
+          : {}),
       };
       return { ...prev, payments: updatedPayments };
     });
@@ -442,6 +483,91 @@ export const useMatricula = () => {
       delete newErrors[errorKey];
       setErrors(newErrors);
     }
+  };
+
+  const addPrepaymentMonth = (paymentIndex: number) => {
+    setFormData((prev) => {
+      const updatedPayments = [...prev.payments];
+      const payment = { ...updatedPayments[paymentIndex] };
+      const months = [...(payment.mesesAdelantados || [])];
+
+      let nextMonthStr = "";
+      const now = new Date();
+
+      if (months.length === 0) {
+        // Start with current month
+        nextMonthStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+      } else {
+        // Get the last month in the list and increment it
+        const lastMonth = months[months.length - 1].mes;
+        const [year, month] = lastMonth.split("-").map(Number);
+        const date = new Date(year, month - 1, 1);
+        date.setMonth(date.getMonth() + 1);
+        nextMonthStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+      }
+
+      // Find suggested price
+      const planId = parseInt(prev.planId);
+      const config = campusPrices.find((cp) => cp.planId === planId);
+      const suggestedPrice = config?.precioMensualidad || 0;
+
+      months.push({ mes: nextMonthStr, monto: suggestedPrice });
+
+      payment.mesesAdelantados = months;
+      payment.monto = months
+        .reduce((sum, m) => sum + Number(m.monto), 0)
+        .toFixed(2)
+        .toString();
+
+      updatedPayments[paymentIndex] = payment;
+      return { ...prev, payments: updatedPayments };
+    });
+  };
+
+  const removePrepaymentMonth = (paymentIndex: number, monthIndex: number) => {
+    setFormData((prev) => {
+      const updatedPayments = [...prev.payments];
+      const payment = { ...updatedPayments[paymentIndex] };
+      let months = [...(payment.mesesAdelantados || [])];
+
+      months = months.filter((_, i) => i !== monthIndex);
+
+      payment.mesesAdelantados = months;
+      payment.monto = months
+        .reduce((sum, m) => sum + Number(m.monto), 0)
+        .toFixed(2)
+        .toString();
+
+      updatedPayments[paymentIndex] = payment;
+      return { ...prev, payments: updatedPayments };
+    });
+  };
+
+  const updatePrepaymentMonth = (
+    paymentIndex: number,
+    monthIndex: number,
+    field: string,
+    value: any,
+  ) => {
+    setFormData((prev) => {
+      const updatedPayments = [...prev.payments];
+      const payment = { ...updatedPayments[paymentIndex] };
+      const months = [...(payment.mesesAdelantados || [])];
+
+      months[monthIndex] = {
+        ...months[monthIndex],
+        [field]: value,
+      };
+
+      payment.mesesAdelantados = months;
+      payment.monto = months
+        .reduce((sum, m) => sum + Number(m.monto), 0)
+        .toFixed(2)
+        .toString();
+
+      updatedPayments[paymentIndex] = payment;
+      return { ...prev, payments: updatedPayments };
+    });
   };
 
   const validateStep = async (step: number): Promise<boolean> => {
@@ -689,7 +815,8 @@ export const useMatricula = () => {
 
       // Create a promise for each payment
       const paymentPromises = formData.payments.map((payment) => {
-        const paymentPayload = {
+        const isPrepayment = payment.tipo === "Mensualidad Adelantada";
+        const paymentPayload: any = {
           enrollmentId: enrollment.id,
           monto: Number(payment.monto),
           tipo: payment.tipo,
@@ -698,6 +825,18 @@ export const useMatricula = () => {
           fechaPago: isoDate,
           campusId: enrollment.campusId,
         };
+
+        if (isPrepayment && payment.mesesAdelantados) {
+          paymentPayload.esAdelantado = true;
+          // Ensure each month's monto is a number
+          paymentPayload.mesesAdelantados = payment.mesesAdelantados.map(
+            (m: any) => ({
+              mes: m.mes,
+              monto: Number(m.monto),
+            }),
+          );
+        }
+
         console.log("Sending Payment Payload:", paymentPayload);
         return PaymentService.create(paymentPayload);
       });
@@ -751,6 +890,9 @@ export const useMatricula = () => {
     addPayment,
     removePayment,
     handlePaymentChange,
+    addPrepaymentMonth,
+    removePrepaymentMonth,
+    updatePrepaymentMonth,
     nextStep,
     prevStep,
     handleFinalAction,
@@ -759,5 +901,6 @@ export const useMatricula = () => {
     startNewEnrollment,
     startExistingEnrollment,
     resetFlow,
+    campusPrices,
   };
 };

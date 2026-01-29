@@ -49,6 +49,7 @@ export interface Plan {
   description?: string;
   costoMatricula?: number;
   costoPension?: number;
+  duracionMeses?: number;
   active: boolean;
 }
 
@@ -133,6 +134,9 @@ export interface CreatePaymentDto {
   numeroBoleta: string;
   fechaPago: string;
   campusId: number;
+  debtId?: number;
+  esAdelantado?: boolean;
+  mesesAdelantados?: { mes: string; monto: number }[];
 }
 
 export interface PaymentResponse {

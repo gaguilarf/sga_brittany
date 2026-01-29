@@ -228,7 +228,23 @@ export const ConfirmationStep = ({
                 <tbody>
                   {formData.payments.map((p: any, i: number) => (
                     <tr key={i}>
-                      <td>{p.tipo}</td>
+                      <td>
+                        <div className={styles.conceptCell}>
+                          <span>{p.tipo}</span>
+                          {p.tipo === "Mensualidad Adelantada" &&
+                            p.mesesAdelantados &&
+                            p.mesesAdelantados.length > 0 && (
+                              <div className={styles.conceptDetails}>
+                                {p.mesesAdelantados
+                                  .map((m: any) => {
+                                    const [year, month] = m.mes.split("-");
+                                    return `${month}/${year}`;
+                                  })
+                                  .join(", ")}
+                              </div>
+                            )}
+                        </div>
+                      </td>
                       <td>{p.metodo}</td>
                       <td className={styles.textRight}>
                         S/. {Number(p.monto).toFixed(2)}

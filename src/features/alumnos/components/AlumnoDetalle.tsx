@@ -7,6 +7,7 @@ import { CampusService } from "@/shared/services/api/campusService";
 import { PlanService } from "@/shared/services/api/planService";
 import { PaymentService } from "@/shared/services/api/paymentService";
 import { DebtService } from "@/shared/services/api/debtService";
+import { ProductService } from "@/shared/services/api/productService";
 import {
   Loader2,
   X,
@@ -21,11 +22,10 @@ import {
   Tag,
 } from "lucide-react";
 import { AcademicService } from "@/shared/services/api/academicService";
-import { ProductService } from "@/shared/services/api/productService";
+import PrepaymentForm from "./PrepaymentForm";
 import {
   EnrollmentResponse,
   Campus,
-  Plan,
   Plan,
   PaymentResponse,
   DebtResponse,
@@ -49,7 +49,13 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
   const [enrollment, setEnrollment] = useState<EnrollmentResponse | null>(null);
   const [campus, setCampus] = useState<Campus | null>(null);
   const [plan, setPlan] = useState<Plan | null>(null);
-  const [payments, setPayments] = useState<PaymentResponse[]>([]);
+  const [payments, setPayments] = useState<any[]>([]);
+  const [expandedPayments, setExpandedPayments] = useState<Set<number>>(
+    new Set(),
+  );
+  const [prepaymentDetails, setPrepaymentDetails] = useState<
+    Record<number, any[]>
+  >({});
   const [debts, setDebts] = useState<DebtResponse[]>([]);
   const [loadingDetails, setLoadingDetails] = useState(true);
 
@@ -58,6 +64,7 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
   const [levelName, setLevelName] = useState<string>("");
   const [cycleName, setCycleName] = useState<string>("");
   const [productName, setProductName] = useState<string>("");
+  const [isPrepaymentModalOpen, setIsPrepaymentModalOpen] = useState(false);
 
   useEffect(() => {
     fetchStudentDetails();
@@ -181,7 +188,9 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
     observaciones: [],
   };
 
-  const totalSaldo = debts.reduce((sum, d) => sum + Number(d.monto), 0);
+  // Filter out fully paid debts
+  const pendingDebts = debts.filter((d) => d.estado !== "PAGADO");
+  const totalSaldo = pendingDebts.reduce((sum, d) => sum + Number(d.monto), 0);
 
   return (
     <div className={styles.container}>
@@ -253,6 +262,14 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
             </svg>
             Editar Datos
+          </button>
+          <button
+            className={styles.btnPrepayment}
+            onClick={() => setIsPrepaymentModalOpen(true)}
+            disabled={!enrollment}
+          >
+            <Calendar size={18} />
+            Pago Adelantado
           </button>
         </div>
       </header>
@@ -764,7 +781,7 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
 
             <div className={styles.financialMetrics}>
               <div className={styles.metricCard}>
-                <span className={styles.infoLabel}>Saldo Pendiente</span>
+                <span className={styles.infoLabel}>Deuda Pendiente</span>
                 <div className={styles.metricValue}>
                   S/. {totalSaldo.toFixed(2)}
                 </div>
@@ -772,11 +789,11 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
               </div>
             </div>
 
-            {debts.length > 0 && (
+            {pendingDebts.length > 0 && (
               <div className={styles.debtsBreakdown}>
-                <h4 className={styles.breakdownTitle}>Saldos por concepto</h4>
+                <h4 className={styles.breakdownTitle}>Deudas por concepto</h4>
                 <div className={styles.breakdownList}>
-                  {debts.map((d) => (
+                  {pendingDebts.map((d) => (
                     <div key={d.id} className={styles.breakdownItem}>
                       <span className={styles.breakdownConcept}>
                         {d.concepto || d.tipoDeuda}
@@ -808,21 +825,124 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
                       </tr>
                     </thead>
                     <tbody>
-                      {payments.map((p) => (
-                        <tr key={p.id}>
-                          <td>
-                            {new Date(p.fechaPago).toLocaleDateString("es-PE")}
-                          </td>
-                          <td>{p.tipo}</td>
-                          <td>{p.metodo}</td>
-                          <td className={styles.amountCell}>
-                            S/. {p.monto.toFixed(2)}
-                          </td>
-                          <td className={styles.boletaCell}>
-                            {p.numeroBoleta}
-                          </td>
-                        </tr>
-                      ))}
+                      {payments.map((p) => {
+                        const isExpanded = expandedPayments.has(p.id);
+                        const isPrepayment =
+                          p.tipo === "Mensualidad Adelantada";
+                        const details = prepaymentDetails[p.id] || [];
+
+                        const toggleExpand = async () => {
+                          if (isPrepayment) {
+                            const newExpanded = new Set(expandedPayments);
+                            if (isExpanded) {
+                              newExpanded.delete(p.id);
+                            } else {
+                              newExpanded.add(p.id);
+                              // Fetch details if not already loaded
+                              if (!prepaymentDetails[p.id]) {
+                                try {
+                                  const response = await fetch(
+                                    `http://localhost:3002/api/payments/${p.id}/prepayment-details`,
+                                    { credentials: "include" },
+                                  );
+                                  const data = await response.json();
+                                  setPrepaymentDetails((prev) => ({
+                                    ...prev,
+                                    [p.id]: data,
+                                  }));
+                                } catch (error) {
+                                  console.error(
+                                    "Error fetching prepayment details:",
+                                    error,
+                                  );
+                                }
+                              }
+                            }
+                            setExpandedPayments(newExpanded);
+                          }
+                        };
+
+                        return (
+                          <React.Fragment key={p.id}>
+                            <tr
+                              key={p.id}
+                              onClick={toggleExpand}
+                              style={{
+                                cursor: isPrepayment ? "pointer" : "default",
+                              }}
+                            >
+                              <td>
+                                {new Date(p.fechaPago).toLocaleDateString(
+                                  "es-PE",
+                                )}
+                              </td>
+                              <td>
+                                {isPrepayment && (
+                                  <span style={{ marginRight: "8px" }}>
+                                    {isExpanded ? "▼" : "▶"}
+                                  </span>
+                                )}
+                                {p.tipo}
+                              </td>
+                              <td>{p.metodo}</td>
+                              <td className={styles.amountCell}>
+                                S/. {p.monto.toFixed(2)}
+                              </td>
+                              <td className={styles.boletaCell}>
+                                {p.numeroBoleta}
+                              </td>
+                            </tr>
+                            {isPrepayment &&
+                              isExpanded &&
+                              details.length > 0 && (
+                                <tr key={`${p.id}-details`}>
+                                  <td
+                                    colSpan={5}
+                                    style={{
+                                      padding: "12px 24px",
+                                      backgroundColor: "#f8f9fa",
+                                    }}
+                                  >
+                                    <div style={{ fontSize: "0.9em" }}>
+                                      <strong>Detalle de meses pagados:</strong>
+                                      <ul
+                                        style={{
+                                          marginTop: "8px",
+                                          marginBottom: "0",
+                                        }}
+                                      >
+                                        {details.map((detail, idx) => {
+                                          const [year, month] =
+                                            detail.mes.split("-");
+                                          const date = new Date(
+                                            parseInt(year),
+                                            parseInt(month) - 1,
+                                            1,
+                                          );
+                                          const monthName = date
+                                            .toLocaleDateString("es-PE", {
+                                              month: "long",
+                                              year: "numeric",
+                                            })
+                                            .toUpperCase();
+
+                                          return (
+                                            <li key={idx}>
+                                              {monthName}: S/.{" "}
+                                              {Number(detail.monto).toFixed(2)}
+                                              {detail.estado === "APLICADO" &&
+                                                " ✓"}
+                                            </li>
+                                          );
+                                        })}
+                                      </ul>
+                                    </div>
+                                  </td>
+                                </tr>
+                              )}
+                          </React.Fragment>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -869,6 +989,18 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
           </div>
         </div>
       </div>
+      {isPrepaymentModalOpen && enrollment && (
+        <PrepaymentForm
+          enrollment={enrollment}
+          plan={plan}
+          campusId={alumno.campusId || 0}
+          onClose={() => setIsPrepaymentModalOpen(false)}
+          onSuccess={() => {
+            fetchStudentDetails();
+            alert("Pago adelantado registrado con éxito");
+          }}
+        />
+      )}
     </div>
   );
 };

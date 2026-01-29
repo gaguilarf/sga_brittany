@@ -109,6 +109,32 @@
   box-shadow: 0 4px 12px rgba(255, 145, 0, 0.2);
 }
 
+.btnPrepayment {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.2rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--color-blue-primary);
+  border: none;
+  color: white;
+}
+
+.btnPrepayment:hover:not(:disabled) {
+  background: var(--color-blue-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(35, 91, 204, 0.2);
+}
+
+.btnPrepayment:disabled {
+  background: var(--color-gray-200);
+  color: var(--color-gray-400);
+  cursor: not-allowed;
+}
+
 /* main Layout */
 .mainGrid {
   display: grid;

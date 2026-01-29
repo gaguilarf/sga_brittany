@@ -786,6 +786,185 @@
   }
 }
 
+/* Prepayment Selection Styles */
+.prepaymentSection {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  background-color: var(--color-gray-50);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-gray-200);
+}
+
+.prepaymentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1.5px dashed var(--color-gray-200);
+}
+
+.prepaymentTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--color-blue-primary);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.addMonthBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-blue-primary);
+  border-radius: var(--radius-md);
+  color: var(--color-blue-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.addMonthBtn:hover {
+  background-color: var(--color-blue-primary);
+  color: var(--color-white);
+}
+
+.monthsListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.monthRow {
+  display: grid;
+  grid-template-columns: 1fr 140px 40px;
+  gap: 0.75rem;
+  align-items: center;
+  background-color: var(--color-white);
+  padding: 0.6rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-gray-200);
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.monthSelect {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--color-gray-700);
+  outline: none;
+  background-color: var(--color-white);
+}
+
+.monthSelect:focus {
+  border-color: var(--color-blue-primary);
+}
+
+.readOnlyMonth {
+  padding: 0.5rem 0.75rem;
+  background-color: var(--color-gray-100);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-blue-dark);
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.priceInputWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-gray-50);
+}
+
+.priceInputWrapper span {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-gray-500);
+}
+
+.monthPriceInput {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-gray-800);
+  outline: none;
+  text-align: right;
+}
+
+.deleteMonthBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--color-gray-400);
+  background: none;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.deleteMonthBtn:hover {
+  color: var(--color-red-500);
+  background-color: var(--color-red-50);
+}
+
+.emptyMonths {
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--color-gray-400);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.input:read-only {
+  background-color: var(--color-gray-50);
+  cursor: not-allowed;
+  color: var(--color-gray-500);
+}
+
+.conceptCell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.conceptDetails {
+  font-size: 0.75rem;
+  color: var(--color-blue-primary);
+  font-weight: 600;
+  background: var(--color-blue-50);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  width: fit-content;
+}
+
 /* Selection Screen */
 .selectionScreen {
   display: flex;

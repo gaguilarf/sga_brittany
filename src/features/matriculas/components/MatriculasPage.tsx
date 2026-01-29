@@ -30,6 +30,9 @@ export default function MatriculasPage() {
     addPayment,
     removePayment,
     handlePaymentChange,
+    addPrepaymentMonth,
+    removePrepaymentMonth,
+    updatePrepaymentMonth,
     nextStep,
     prevStep,
     handleFinalAction,
@@ -40,6 +43,7 @@ export default function MatriculasPage() {
     resetFlow,
     success,
     setSuccess,
+    campusPrices,
   } = useMatricula();
 
   return (
@@ -187,6 +191,11 @@ export default function MatriculasPage() {
                 handlePaymentChange={handlePaymentChange}
                 addPayment={addPayment}
                 removePayment={removePayment}
+                plans={plans}
+                addPrepaymentMonth={addPrepaymentMonth}
+                removePrepaymentMonth={removePrepaymentMonth}
+                updatePrepaymentMonth={updatePrepaymentMonth}
+                campusPrices={campusPrices}
               />
             )}
 
