@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { StudentService } from "@/shared/services/api/studentService";
 import { CampusService } from "@/shared/services/api/campusService";
 import { PlanService } from "@/shared/services/api/planService";
@@ -24,6 +25,8 @@ import { PAYMENT_TYPES } from "../constants/PaymentTypes";
 
 export const useMatricula = () => {
   const { user } = useAuth();
+  const searchParams = useSearchParams();
+
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -111,6 +114,49 @@ export const useMatricula = () => {
     };
     fetchData();
   }, []);
+
+  // Handle URL params for redirection from Payments module
+  useEffect(() => {
+    const studentIdParam = searchParams.get("studentId");
+    const typeParam = searchParams.get("type");
+
+    if (studentIdParam) {
+      const fetchStudent = async () => {
+        try {
+          const student = await StudentService.getById(Number(studentIdParam));
+          if (student) {
+            setSelectedStudent(student);
+            setFormData((prev) => ({
+              ...prev,
+              id: student.id,
+              nombre: student.nombre,
+              dni: student.dni || "",
+              fechaNacimiento: student.fechaNacimiento || "",
+              edad: student.edad?.toString() || "",
+              distrito: student.distrito || "",
+              celularAlumno: student.celularAlumno || "",
+              celularApoderado: student.celularApoderado || "",
+              email: student.correo || "",
+              enrollmentType:
+                typeParam === "PRODUCT" ? "PRODUCT" : prev.enrollmentType || "",
+            }));
+
+            setIsExistingStudent(true);
+
+            // If it's a product enrollment redirection, jump to step 2
+            if (typeParam === "PRODUCT") {
+              setCurrentStep(2);
+              // We might want to set enrollmentFlow to 'existing' strictly for UI logic if needed
+              // setEnrollmentFlow("existing");
+            }
+          }
+        } catch (err) {
+          console.error("Error fetching student from params:", err);
+        }
+      };
+      fetchStudent();
+    }
+  }, [searchParams]);
 
   const handleInputChange = (
     e: React.ChangeEvent<
