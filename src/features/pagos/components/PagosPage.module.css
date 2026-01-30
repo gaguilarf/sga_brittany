@@ -1,0 +1,810 @@
+.pagosContainer {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: var(--font-inter, "Inter", -apple-system, sans-serif);
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  color: var(--color-blue-primary);
+  font-weight: 750;
+  margin: 0;
+}
+
+.searchSection {
+  margin-bottom: 2rem;
+}
+
+.searchInputWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.2s;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.searchIcon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+.clearSearchBtn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.clearSearchBtn:hover {
+  background-color: #f1f5f9;
+  color: #ef4444;
+}
+
+.sectionCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-gray-200);
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.sectionBody {
+  padding: 1.5rem;
+}
+
+.studentInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.infoLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.infoValue {
+  font-size: 1rem;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.debtsSection {
+  padding-top: 1.5rem;
+}
+
+.debtsTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.debtsGrid {
+  display: grid;
+  /* Changed to 1 column for list view look, or explicit minmax for cards */
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+/* Updated Debt Item Styles */
+.debtItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #fff;
+  transition: all 0.2s ease;
+}
+
+.debtItem:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.debtItemSelected {
+  border-color: #2563eb;
+  background-color: #eff6ff;
+  box-shadow: 0 0 0 1px #2563eb;
+}
+
+.debtContentWrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.debtCheckbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #2563eb;
+}
+
+.debtInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.debtLabel {
+  font-size: 0.95rem;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.debtStatusTag {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.debtValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.debtValueHighlight {
+  color: #ef4444;
+}
+
+/* Form Styles */
+.formSection {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.formHeader {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+}
+
+.formHeader h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.redirectMessage {
+  grid-column: 1 / -1;
+  background-color: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+  padding: 1rem;
+  color: #1e40af;
+}
+
+.methodSection {
+  margin-bottom: 2rem;
+}
+
+.methodLabel {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 1rem;
+}
+
+.methodGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .methodGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.methodCard {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.methodCard:hover {
+  border-color: #cbd5e1;
+  background-color: #f8fafc;
+}
+
+.methodCardActive {
+  border-color: #f97316;
+  background-color: #fffaf5;
+  box-shadow: 0 0 0 2px #f97316;
+}
+
+.methodIcon {
+  width: 24px;
+  height: 24px;
+  transition: color 0.2s;
+}
+
+.methodCardActive .methodIcon {
+  color: #f97316;
+}
+
+.methodName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #475569;
+}
+
+.methodCardActive .methodName {
+  color: #f97316;
+  font-weight: 600;
+}
+
+.summarySection {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.summaryTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.summaryRowTotal {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--color-blue-primary);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.btnCancel {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  background-color: #e2e8f0;
+  color: #475569;
+  transition: all 0.2s;
+}
+
+.btnCancel:hover {
+  background-color: #cbd5e1;
+}
+
+.btnSubmit {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  background-color: #f97316;
+  color: #fff;
+  box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.2);
+  transition: all 0.2s;
+}
+
+.btnSubmit:hover {
+  background-color: #ea580c;
+  transform: translateY(-1px);
+}
+
+.btnSubmit:active {
+  transform: translateY(0);
+}
+
+/* Spinner */
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* Prepayment Module Styles */
+.prepaymentModule {
+  grid-column: 1 / -1;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.prepaymentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.prepaymentTitleArea {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #2563eb;
+}
+
+.prepaymentTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.addMonthBtn {
+  font-size: 0.875rem;
+  padding: 0.5rem 1.25rem;
+  background-color: transparent;
+  color: #2563eb;
+  border: 1px solid #2563eb;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.addMonthBtn:hover {
+  background-color: #eff6ff;
+}
+
+.monthsListVertical {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.monthRowItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s;
+}
+
+.monthRowItem:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.monthDisplayBox {
+  flex: 1;
+  background-color: #f1f5f9;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.monthDisplayText {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  text-transform: uppercase;
+}
+
+.amountInputContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.monthAmountField {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.25rem 0.75rem;
+  width: 140px;
+}
+
+.currencyLabel {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.monthAmountInputRow {
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1e293b;
+  text-align: right;
+  padding: 4px 0;
+}
+
+.monthAmountInputRow:focus {
+  outline: none;
+}
+
+.removeMonthRowBtn {
+  background: transparent;
+  color: #94a3b8;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.removeMonthRowBtn:hover {
+  background-color: #fee2e2;
+  color: #ef4444;
+}
+
+.prepaymentTotalDisplay {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: #64748b;
+}
+
+.prepaymentTotalDisplay strong {
+  color: #1e293b;
+  font-size: 1.1rem;
+}
+
+/* Multi-Concept Styles */
+.formTitleArea {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sectionTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.sectionSubtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.addConceptBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  color: #334155;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.addConceptBtn:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+  color: #1e293b;
+}
+
+.paymentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.paymentItemCard {
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.paymentItemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.conceptNumber {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.removeConceptBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #ef4444;
+  background-color: #fef2f2;
+  border: 1px solid #fee2e2;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.removeConceptBtn:hover {
+  background-color: #fee2e2;
+}
+
+.paymentItemGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .paymentItemGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.amountInputWrapperInline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.amountInputWrapperInline span {
+  position: absolute;
+  left: 1rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.amountInputWrapperInline input {
+  padding-left: 2.25rem;
+}
+
+.productRedirectBox {
+  background-color: #f0f9ff;
+  border: 1px solid #e0f2fe;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.productRedirectBox p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #0369a1;
+}
+
+.btnRedirectSmall {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: fit-content;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  background-color: #0ea5e9;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btnRedirectSmall:hover {
+  background-color: #0284c7;
+}
+
+.prepaymentModuleInline {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.paymentMetadataGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+@media (max-width: 768px) {
+  .paymentMetadataGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.methodGridSmall {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.methodCardSmall {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #64748b;
+  transition: all 0.2s;
+}
+
+.methodCardSmall:hover {
+  background-color: #f1f5f9;
+}
+
+.methodCardSmall.methodCardActive {
+  border-color: #f97316;
+  background-color: #fffaf5;
+  color: #f97316;
+  box-shadow: 0 0 0 1px #f97316;
+}
+
+.highlightAmount {
+  color: #f97316;
+  font-weight: 800;
+  font-size: 1.35rem;
+}

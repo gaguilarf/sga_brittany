@@ -1,6 +1,10 @@
 .mainContainer {
   padding: 2rem;
+<<<<<<< HEAD
   max-width: 1200px;
+=======
+  max-width: 1400px;
+>>>>>>> birttany_front/main
   margin: 0 auto;
   min-height: 80vh;
 }
@@ -15,6 +19,7 @@
 .title {
   color: var(--color-blue-primary);
   font-size: 2rem;
+<<<<<<< HEAD
 }
 
 .tableWrapper {
@@ -22,6 +27,21 @@
   border: 2px solid var(--color-blue-primary);
   border-radius: 15px;
   background: white;
+=======
+  font-weight: 750;
+  margin: 0;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: white;
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.05),
+    0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  overflow: hidden; /* Ensure rounded corners clip children */
+>>>>>>> birttany_front/main
 }
 
 .table {
@@ -35,6 +55,10 @@
   color: white;
   padding: 1rem;
   font-weight: 600;
+<<<<<<< HEAD
+=======
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+>>>>>>> birttany_front/main
 }
 
 .table td {
@@ -49,6 +73,57 @@
   gap: 0.5rem;
 }
 
+<<<<<<< HEAD
+=======
+.buttonGroup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.viewToggleBtn,
+.exportBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.viewToggleBtn {
+  background: var(--color-white);
+  color: var(--color-blue-primary);
+  border: 2px solid var(--color-blue-primary);
+}
+
+.viewToggleBtn:hover {
+  background: var(--color-blue-primary);
+  color: var(--color-white);
+  transform: translateY(-2px);
+}
+
+.exportBtn {
+  background: var(--color-orange-primary);
+  color: var(--color-white);
+  border: none;
+}
+
+.exportBtn:hover:not(:disabled) {
+  background: var(--color-orange-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 142, 21, 0.2);
+}
+
+.exportBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+>>>>>>> birttany_front/main
 .editBtn,
 .deleteBtn {
   padding: 0.4rem 0.8rem;
@@ -65,6 +140,7 @@
   color: white;
 }
 
+<<<<<<< HEAD
 .deleteBtn {
   border-color: #ff4d4d;
   color: #ff4d4d;
@@ -107,6 +183,100 @@
 }
 
 /* Animación para que entre desde la derecha */
+=======
+/* Filters */
+.filterBar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  background: white;
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+.filterGroup label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--color-blue-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+}
+
+.searchInput,
+.filterSelect {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #d1d5db;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  width: 100%;
+  transition: all 0.2s;
+}
+
+.searchInput:focus,
+.filterSelect:focus {
+  outline: none;
+  border-color: var(--color-blue-primary);
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+/* Sortable Headers */
+.sortableHeader {
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s;
+}
+
+.sortableHeader:hover {
+  background-color: var(--color-blue-dark);
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.sortIcon {
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto; /* Push icon to the right if needed, or keep it near text */
+}
+
+/* Status tags for Advisor */
+.statusLanding {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  border: 1px solid #d1d5db;
+}
+
+.statusInternal {
+  background-color: #ecfdf5;
+  color: #047857;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid #10b981;
+}
+
+>>>>>>> birttany_front/main
 @keyframes slideIn {
   from {
     transform: translateX(120%);

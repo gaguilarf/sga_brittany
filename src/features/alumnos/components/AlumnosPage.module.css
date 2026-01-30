@@ -1,0 +1,531 @@
+.alumnosContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  color: var(--color-blue-primary);
+  font-weight: 800;
+  margin: 0;
+}
+
+.btnNewAlumno {
+  background: var(--color-orange-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btnNewAlumno:hover {
+  background: var(--color-orange-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 123, 0, 0.2);
+}
+
+/* Filter Card */
+.filterCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-gray-200);
+  padding: 2rem 1.5rem;
+}
+
+.filtersGrid {
+  display: grid;
+  grid-template-columns: 220px 220px 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  align-items: flex-end;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filterLabel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-gray-400);
+}
+
+.select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  color: var(--color-gray-600);
+  background: var(--color-white);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.2rem;
+  transition: all var(--transition-base);
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--color-blue-primary);
+}
+
+.searchGroup {
+  width: 100%;
+}
+
+.searchWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-gray-400);
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 3rem;
+  border: 1.5px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  transition: all var(--transition-base);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--color-blue-primary);
+  box-shadow: 0 0 0 4px rgba(35, 91, 204, 0.05);
+}
+
+/* Table */
+.tableContainer {
+  overflow-x: auto;
+  margin-bottom: 2rem;
+  min-height: 400px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Keep fixed layout for stability */
+}
+
+.table thead tr {
+  background: var(--color-blue-primary);
+}
+
+.table th {
+  padding: 1rem 1.25rem;
+  text-align: left;
+  color: var(--color-white);
+  font-size: 0.82rem; /* Sligthly smaller to fit headers */
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  vertical-align: middle;
+  position: relative;
+}
+
+/* Column Widths - Balanced percentages for better fit */
+.table th:nth-child(1) {
+  width: 24%;
+} /* Nombre + Email */
+.table th:nth-child(2) {
+  width: 12%;
+} /* DNI */
+.table th:nth-child(3) {
+  width: 13%;
+} /* Sede (-1%) */
+.table th:nth-child(4) {
+  width: 13%;
+} /* Estado (+1%) */
+.table th:nth-child(5) {
+  width: 18%;
+} /* Fecha de Ingreso */
+.table th:nth-child(6) {
+  width: 20%;
+} /* Acciones */
+
+/* Specific padding for Estado column */
+.table th:nth-child(4),
+.table td:nth-child(4) {
+  padding-inline: 0.75rem;
+}
+
+.sortableHeader {
+  cursor: pointer;
+  transition: background 0.2s;
+  user-select: none;
+}
+
+.sortableHeader:hover {
+  background: var(--color-blue-dark);
+}
+
+.headerContent {
+  display: inline-flex; /* Use inline-flex to tighten around content */
+  align-items: center;
+  gap: 0.4rem;
+  max-width: 100%;
+}
+
+.sortIcon {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.activeSort {
+  color: var(--color-orange-primary);
+  opacity: 1;
+}
+
+.table th:first-child {
+  border-top-left-radius: var(--radius-md);
+}
+
+.table th:last-child {
+  border-top-right-radius: var(--radius-md);
+  text-align: center;
+}
+
+.table td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-gray-100);
+  font-size: 0.95rem;
+  color: var(--color-gray-600);
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Reduced padding for Estado column to prevent truncation */
+.table td:nth-child(4) {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.table td:last-child {
+  overflow: visible; /* Prevent buttons from clipping */
+  text-align: center;
+}
+
+.nameCell {
+  font-weight: 700;
+  color: var(--color-blue-dark);
+  white-space: normal; /* Allow stacking of name and email */
+  overflow: visible;
+}
+
+.emailSub {
+  font-size: 0.8rem;
+  color: var(--color-gray-400);
+  font-weight: 400;
+  margin-top: 0.2rem;
+  display: block;
+}
+
+.emptyResults {
+  text-align: center;
+  padding: 4rem;
+  color: var(--color-gray-400);
+  font-style: italic;
+}
+
+/* Badges */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.activo {
+  color: #16a34a;
+}
+.activo .statusDot {
+  background: #22c55e;
+}
+
+.inactivo {
+  color: #dc2626;
+}
+.inactivo .statusDot {
+  background: #ef4444;
+}
+
+.egresado {
+  color: #2563eb;
+}
+.egresado .statusDot {
+  background: #3b82f6;
+}
+
+/* Table Actions */
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  white-space: normal;
+}
+
+.btnEdit,
+.btnDetails {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  white-space: nowrap;
+}
+
+.btnEdit {
+  background: var(--color-orange-primary);
+  color: var(--color-white);
+  border: none;
+}
+
+.btnEdit:hover {
+  background: var(--color-orange-dark);
+}
+
+.btnDetails {
+  background: var(--color-gray-100);
+  color: var(--color-gray-600);
+  border: 1px solid var(--color-gray-200);
+}
+
+.btnDetails:hover {
+  background: var(--color-gray-200);
+}
+
+.btnSave,
+.btnCancel {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btnSave {
+  background: #16a34a;
+  color: var(--color-white);
+  border: none;
+}
+
+.btnSave:hover {
+  background: #15803d;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.2);
+}
+
+.btnCancel {
+  background: var(--color-gray-100);
+  color: var(--color-gray-600);
+  border: 1px solid var(--color-gray-200);
+}
+
+.btnCancel:hover {
+  background: var(--color-gray-200);
+}
+
+/* Editing State */
+.editingRow {
+  background-color: rgba(35, 91, 204, 0.03) !important;
+}
+
+.editingRow td {
+  border-bottom: 2px solid var(--color-blue-primary) !important;
+}
+
+.editInputsStack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.inlineInput,
+.inlineInputSmall,
+.inlineSelect {
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  border: 1.5px solid var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--color-gray-700);
+  background: var(--color-white);
+  transition: all var(--transition-base);
+}
+
+.inlineInputSmall {
+  font-size: 0.75rem;
+  color: var(--color-gray-400);
+}
+
+.inlineInput:focus,
+.inlineInputSmall:focus,
+.inlineSelect:focus {
+  outline: none;
+  border-color: var(--color-blue-primary);
+  box-shadow: 0 0 0 3px rgba(35, 91, 204, 0.1);
+}
+
+.inlineSelect {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.4rem center;
+  background-size: 1rem;
+  padding-right: 1.5rem;
+}
+
+/* Footer & Pagination */
+.tableFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-gray-100);
+}
+
+.footerLeft {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.recordsInfo {
+  font-size: 0.9rem;
+  color: var(--color-gray-400);
+  font-weight: 500;
+}
+
+.pageSizeSelector {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--color-gray-500);
+  font-weight: 500;
+}
+
+.pageSizeSelector select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  color: var(--color-gray-600);
+  outline: none;
+  cursor: pointer;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pageBtn {
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-gray-500);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.pageBtn:hover:not(:disabled) {
+  border-color: var(--color-orange-primary);
+  color: var(--color-orange-primary);
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.activePage {
+  background: var(--color-orange-primary);
+  color: var(--color-white);
+  border-color: var(--color-orange-primary);
+}
+
+.activePage:hover {
+  color: var(--color-white);
+}
+
+.paginationEllipsis {
+  color: var(--color-gray-300);
+  padding: 0 0.25rem;
+}
+
+@media (max-width: 1024px) {
+  .filtersGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footerLeft {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .filtersGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .tableFooter {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}

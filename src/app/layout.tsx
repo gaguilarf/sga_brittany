@@ -15,6 +15,11 @@ export const metadata: Metadata = {
   },
 };
 
+<<<<<<< HEAD
+=======
+import { AuthProvider } from "@/shared/contexts/AuthContext";
+
+>>>>>>> birttany_front/main
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -23,8 +28,15 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
+<<<<<<< HEAD
         {children}
         <BackToTop />
+=======
+        <AuthProvider>
+          {children}
+          <BackToTop />
+        </AuthProvider>
+>>>>>>> birttany_front/main
       </body>
     </html>
   );

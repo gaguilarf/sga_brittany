@@ -7,6 +7,7 @@ import styles from "./Header.module.css";
 
 export default function Header() {
   const router = useRouter();
+<<<<<<< HEAD
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Inicia el contador (ej. 3 segundos para que sea realmente secreto)
@@ -22,6 +23,8 @@ export default function Header() {
       clearTimeout(timerRef.current);
     }
   };
+=======
+>>>>>>> birttany_front/main
 
   return (
     <header className={styles.header}>
@@ -29,11 +32,15 @@ export default function Header() {
         <div className={styles.headerContent}>
           <div
             className={styles.logo}
+<<<<<<< HEAD
             onMouseDown={startPress}
             onMouseUp={cancelPress}
             onMouseLeave={cancelPress} // Cancela si el mouse sale del logo
             onTouchStart={startPress} // Soporte para móviles
             onTouchEnd={cancelPress}
+=======
+            onClick={() => router.push("/")}
+>>>>>>> birttany_front/main
             style={{ cursor: "pointer", userSelect: "none" }}
           >
             <Image
@@ -58,12 +65,19 @@ export default function Header() {
             </a>
 
             <a
+<<<<<<< HEAD
               href="https://wa.me/51999999999"
               target="_blank"
               rel="noopener noreferrer"
               className={`btn btn-small btn-primary ${styles.whatsappBtn}`}
             >
               Hablar por WhatsApp
+=======
+              href="/login"
+              className={`btn btn-small btn-primary ${styles.loginBtn}`}
+            >
+              Iniciar Sesión
+>>>>>>> birttany_front/main
             </a>
           </nav>
         </div>

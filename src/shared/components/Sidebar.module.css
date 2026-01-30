@@ -1,0 +1,230 @@
+.sidebar {
+  height: 100vh;
+  background: var(--color-blue-primary); /* Keep Blue in all states */
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  transition:
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.3s ease;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1100;
+  box-shadow: var(--shadow-md);
+}
+
+.collapsed {
+  width: 80px;
+  background: var(--color-blue-primary); /* explicit for safety */
+  /* border-right: 1px solid var(--color-gray-200); */ /* Removed as per instruction */
+}
+
+.sidebarHeader {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.collapsed .sidebarHeader {
+  padding: 0;
+  justify-content: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.collapsed .logoContainer {
+  justify-content: center;
+}
+
+.logo {
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.02);
+}
+
+.toggleBtn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.collapsed .toggleBtn {
+  position: absolute;
+  right: -16px;
+  top: 24px;
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-blue-primary);
+  border: 1px solid var(--color-gray-200);
+}
+
+.toggleBtn:hover {
+  background: var(--color-white);
+  color: var(--color-blue-primary);
+}
+
+.sidebarNav {
+  flex: 1;
+  padding: 1.5rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.collapsed .sidebarNav {
+  padding: 1.5rem 0;
+  align-items: center;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-lg);
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  text-decoration: none;
+  font-weight: 500;
+  margin: 0.2rem 0;
+}
+
+.collapsed .navItem {
+  padding: 1rem;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.navItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  transform: translateX(4px);
+}
+
+.collapsed .navItem:hover {
+  transform: scale(1.05);
+}
+
+.active {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  color: white !important;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Orange indicator bar for active item */
+.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20%;
+  height: 60%;
+  width: 4px;
+  background-color: var(--color-orange-primary);
+  border-radius: 0 4px 4px 0;
+}
+
+.collapsed .active {
+  background: var(--color-white);
+  color: var(--color-blue-primary) !important;
+}
+
+.collapsed .active::before {
+  display: none;
+}
+
+.navItem:hover .icon {
+  color: white;
+  transform: rotate(-5deg) scale(1.1);
+}
+
+.collapsed .active:hover .icon {
+  color: var(--color-blue-primary);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  white-space: nowrap;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.tooltip {
+  position: absolute;
+  left: calc(100% + 1rem);
+  background: var(--color-gray-900);
+  color: var(--color-white);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.2s ease;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .navItem:hover .tooltip {
+    display: block;
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar:not(.collapsed) {
+    transform: translateX(0);
+  }
+}
