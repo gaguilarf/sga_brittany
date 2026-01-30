@@ -33,11 +33,7 @@ export type Modalidad = "Virtual" | "Presencial";
 export type Sede =
   | "Lima - Miraflores"
   | "Lima - Lince"
-<<<<<<< HEAD
-  | "Arequipa - Bustamante"
-=======
   | "Arequipa - José Luis Bustamante R."
->>>>>>> birttany_front/main
   | "Arequipa - San José"
   | "Arequipa - Umacollo"
   | "Arequipa - Cayma"
@@ -55,11 +51,7 @@ export type MedioContacto =
 export const SEDES: Sede[] = [
   "Lima - Miraflores",
   "Lima - Lince",
-<<<<<<< HEAD
-  "Arequipa - Bustamante",
-=======
   "Arequipa - José Luis Bustamante R.",
->>>>>>> birttany_front/main
   "Arequipa - San José",
   "Arequipa - Umacollo",
   "Arequipa - Cayma",
