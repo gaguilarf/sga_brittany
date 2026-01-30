@@ -1,10 +1,6 @@
 .mainContainer {
   padding: 2rem;
-<<<<<<< HEAD
-  max-width: 1200px;
-=======
   max-width: 1400px;
->>>>>>> birttany_front/main
   margin: 0 auto;
   min-height: 80vh;
 }
@@ -19,18 +15,11 @@
 .title {
   color: var(--color-blue-primary);
   font-size: 2rem;
-<<<<<<< HEAD
-}
-
-.tableWrapper {
-  overflow-x: auto; /* Para que sea responsiva en móviles */
-  border: 2px solid var(--color-blue-primary);
-  border-radius: 15px;
-  background: white;
-=======
   font-weight: 750;
   margin: 0;
 }
+
+/* ================= TABLE ================= */
 
 .tableWrapper {
   overflow-x: auto;
@@ -40,8 +29,7 @@
   box-shadow:
     0 10px 25px -5px rgba(0, 0, 0, 0.05),
     0 8px 10px -6px rgba(0, 0, 0, 0.05);
-  overflow: hidden; /* Ensure rounded corners clip children */
->>>>>>> birttany_front/main
+  overflow: hidden;
 }
 
 .table {
@@ -55,10 +43,7 @@
   color: white;
   padding: 1rem;
   font-weight: 600;
-<<<<<<< HEAD
-=======
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
->>>>>>> birttany_front/main
 }
 
 .table td {
@@ -73,8 +58,8 @@
   gap: 0.5rem;
 }
 
-<<<<<<< HEAD
-=======
+/* ================= BUTTONS ================= */
+
 .buttonGroup {
   display: flex;
   align-items: center;
@@ -123,9 +108,7 @@
   cursor: not-allowed;
 }
 
->>>>>>> birttany_front/main
-.editBtn,
-.deleteBtn {
+.editBtn {
   padding: 0.4rem 0.8rem;
   border-radius: 8px;
   background: var(--color-orange-primary);
@@ -137,54 +120,10 @@
 
 .editBtn:hover {
   background: var(--color-blue-primary);
-  color: white;
 }
 
-<<<<<<< HEAD
-.deleteBtn {
-  border-color: #ff4d4d;
-  color: #ff4d4d;
-}
+/* ================= FILTERS ================= */
 
-.deleteBtn:hover {
-  background: #ff4d4d;
-  color: white;
-}
-
-.exportBtn {
-  white-space: nowrap;
-}
-
-.toast {
-  position: fixed;
-  top: 2rem;
-  right: 2rem;
-  padding: 1rem 2rem;
-  border-radius: 12px;
-  color: white;
-  font-weight: 600;
-  z-index: 9999;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  min-width: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.success {
-  background-color: #10b981; /* Verde esmeralda */
-  border-left: 6px solid #059669;
-}
-
-.error {
-  background-color: #ef4444; /* Rojo */
-  border-left: 6px solid #b91c1c;
-}
-
-/* Animación para que entre desde la derecha */
-=======
-/* Filters */
 .filterBar {
   display: flex;
   gap: 1rem;
@@ -230,7 +169,8 @@
   box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
 }
 
-/* Sortable Headers */
+/* ================= SORTING ================= */
+
 .sortableHeader {
   cursor: pointer;
   user-select: none;
@@ -248,13 +188,8 @@
   width: 100%;
 }
 
-.sortIcon {
-  display: inline-flex;
-  align-items: center;
-  margin-left: auto; /* Push icon to the right if needed, or keep it near text */
-}
+/* ================= STATUS TAGS ================= */
 
-/* Status tags for Advisor */
 .statusLanding {
   background-color: #f3f4f6;
   color: #4b5563;
@@ -276,7 +211,35 @@
   border: 1px solid #10b981;
 }
 
->>>>>>> birttany_front/main
+/* ================= TOAST ================= */
+
+.toast {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  z-index: 9999;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  min-width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.success {
+  background-color: #10b981;
+  border-left: 6px solid #059669;
+}
+
+.error {
+  background-color: #ef4444;
+  border-left: 6px solid #b91c1c;
+}
+
 @keyframes slideIn {
   from {
     transform: translateX(120%);
