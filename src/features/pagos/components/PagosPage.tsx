@@ -139,7 +139,7 @@ export default function PagosPage() {
         );
         allDebts = [...allDebts, ...pending];
       }
-      setDebts(allDebts);
+      setDebts(allDebts.filter((d: any) => Number(d.monto) > 0));
     } catch (err) {
       console.error("Error fetching debts", err);
       setDebts([]);

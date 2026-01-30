@@ -125,7 +125,7 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
               new Date(b.fechaPago).getTime() - new Date(a.fechaPago).getTime(),
           ),
         );
-        setDebts(debtsData);
+        setDebts(debtsData.filter((d: any) => Number(d.monto) > 0));
 
         // Resolve info for ALL enrollments
         const resolvedMap: any = {};
@@ -152,11 +152,14 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
         // Parallel resolve levels/cycles for PLAN enrollments
         await Promise.all(
           enrList
-            .filter((e) => e.enrollmentType === "PLAN" && e.initialLevelId)
+            .filter(
+              (e) =>
+                e.enrollmentType === "PLAN" && e.courseId && e.initialLevelId,
+            )
             .map(async (e) => {
               try {
                 const levels = await AcademicService.getLevelsByCourse(
-                  e.courseId,
+                  e.courseId!,
                 );
                 const level = levels.find((l) => l.id === e.initialLevelId);
                 if (level) {
