@@ -4,13 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-<<<<<<< HEAD
     "build": "next build --turbopack",
     "start": "next start"
-=======
-    "build": "next build",
-    "start": "npx serve@latest out"
->>>>>>> birttany_front/main
   },
   "dependencies": {
     "lucide-react": "^0.562.0",
