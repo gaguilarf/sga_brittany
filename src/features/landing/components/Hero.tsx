@@ -6,12 +6,7 @@ export default function Hero() {
     <section className={styles.hero}>
       {/* 1. Video: Debe estar fuera del div container para no empujar el texto */}
       <video autoPlay muted loop playsInline className={styles.videoBackground}>
-<<<<<<< HEAD
-        {/* IMPORTANTE: El video debe estar en la carpeta 'public' y llamarse así */}
-        <source src="/background.mp4" type="video/mp4" />
-=======
         <source src="/background_video.mp4" type="video/mp4" />
->>>>>>> birttany_front/main
       </video>
 
       {/* 2. Capa de transparencia para que el texto se lea bien */}
