@@ -121,6 +121,7 @@ export interface EnrollmentResponse {
   origen?: string;
   numeroBoleta?: string;
   saldo: number;
+  saldoFavor: number;
   active: boolean;
   createdAt: string;
   updatedAt: string;

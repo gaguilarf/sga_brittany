@@ -17,6 +17,9 @@ import {
   MapPin,
   Tag,
   GraduationCap,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
 } from "lucide-react";
 import { AcademicService } from "@/shared/services/api/academicService";
 import PrepaymentForm from "./PrepaymentForm";
@@ -54,6 +57,11 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
     Record<number, any[]>
   >({});
   const [debts, setDebts] = useState<DebtResponse[]>([]);
+  const [consumos, setConsumos] = useState<any[]>([]);
+  const [monthlySummary, setMonthlySummary] = useState<any[]>([]);
+  const [nettedPrepayments, setNettedPrepayments] = useState<any[]>([]);
+  const [nettedDebts, setNettedDebts] = useState<any[]>([]);
+  const [totalNettedSaldo, setTotalNettedSaldo] = useState(0);
   const [loadingDetails, setLoadingDetails] = useState(true);
 
   // Resolved names for display (Map of enrollmentId -> name info)
@@ -126,6 +134,31 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
           ),
         );
         setDebts(debtsData.filter((d: any) => Number(d.monto) > 0));
+
+        // Fetch Account Statement (Credits, Consumos, etc)
+        try {
+          const response = await fetch(
+            `http://localhost:3002/api/enrollments/${activeEnrollment.id}/account-statement`,
+            { credentials: "include" },
+          );
+          if (response.ok) {
+            const statementData = await response.json();
+            setConsumos(statementData.consumos || []);
+            setMonthlySummary(statementData.monthlySummary || []);
+            setNettedPrepayments(statementData.nettedPrepayments || []);
+            setNettedDebts(statementData.nettedDebts || []);
+            setTotalNettedSaldo(statementData.totalNettedSaldo || 0);
+            // Update enrollment saldoFavor locally if needed
+            const updatedEnrollments = enrList.map((e) =>
+              e.id === activeEnrollment.id
+                ? { ...e, saldoFavor: statementData.enrollment.saldoFavor }
+                : e,
+            );
+            setEnrollments(updatedEnrollments);
+          }
+        } catch (err) {
+          console.error("Error fetching account statement", err);
+        }
 
         // Resolve info for ALL enrollments
         const resolvedMap: any = {};
@@ -852,50 +885,187 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
             </div>
 
             <div className={styles.financialMetrics}>
-              <div className={styles.metricCard}>
-                <span className={styles.infoLabel}>Deuda Pendiente</span>
-                <div className={styles.metricValue}>
-                  S/. {totalSaldo.toFixed(2)}
+              {/* Card Crédito Disponible */}
+              <div className={`${styles.metricCard} ${styles.creditCard}`}>
+                <span className={styles.infoLabel}>
+                  MENS. PAGADAS POR ADELANTADO
+                </span>
+                <div className={`${styles.metricValue} ${styles.creditValue}`}>
+                  S/.{" "}
+                  {nettedPrepayments
+                    .reduce((sum, m) => sum + m.monto, 0)
+                    .toFixed(2)}
                 </div>
-                <span className={styles.caption}>Matrícula Vigente</span>
+                <div style={{ marginTop: "0.8rem", fontSize: "0.85rem" }}>
+                  {nettedPrepayments.length > 0 ? (
+                    <ul
+                      style={{
+                        padding: 0,
+                        margin: 0,
+                        listStyle: "none",
+                        color: "#065f46",
+                      }}
+                    >
+                      {nettedPrepayments.map((m, idx) => (
+                        <li
+                          key={idx}
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            marginBottom: "4px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span style={{ fontWeight: 600 }}>{m.mes}</span>
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: "0.5rem",
+                              alignItems: "center",
+                            }}
+                          >
+                            <span style={{ fontWeight: 700 }}>
+                              S/. {m.monto.toFixed(2)}
+                            </span>
+                            <span
+                              className={
+                                m.estado === "TOTAL"
+                                  ? styles.statusTotal
+                                  : styles.statusParcialSmall
+                              }
+                            >
+                              ({m.estado})
+                            </span>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <span
+                      className={styles.caption}
+                      style={{ color: "#64748b" }}
+                    >
+                      Sin mensualidades adelantadas
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Card Deuda Pendiente */}
+              <div
+                className={`${styles.metricCard} ${totalNettedSaldo > 0 ? styles.debtCardAlert : ""}`}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <span className={styles.infoLabel}>Deuda Pendiente</span>
+                  {totalNettedSaldo > 0 && (
+                    <AlertTriangle size={16} color="#dc2626" />
+                  )}
+                </div>
+                <div
+                  className={`${styles.metricValue} ${totalNettedSaldo > 0 ? styles.debtValueCritical : ""}`}
+                >
+                  S/. {totalNettedSaldo.toFixed(2)}
+                </div>
+                <div style={{ marginTop: "0.8rem", fontSize: "0.85rem" }}>
+                  {nettedDebts.filter((d) => Number(d.monto) > 0).length > 0 ? (
+                    <ul
+                      style={{
+                        padding: 0,
+                        margin: 0,
+                        listStyle: "none",
+                        color: totalNettedSaldo > 0 ? "#991b1b" : "#64748b",
+                      }}
+                    >
+                      {nettedDebts
+                        .filter((d) => Number(d.monto) > 0)
+                        .map((d, idx) => (
+                          <li
+                            key={idx}
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              marginBottom: "4px",
+                            }}
+                          >
+                            <span style={{ fontWeight: 600 }}>
+                              {d.mesAplicado || d.concepto || "Deuda"}
+                            </span>
+                            <span>S/. {Number(d.monto).toFixed(2)}</span>
+                          </li>
+                        ))}
+                    </ul>
+                  ) : (
+                    <span
+                      className={styles.caption}
+                      style={{ color: "#64748b" }}
+                    >
+                      Sin deudas pendientes
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
 
-            {(pendingDebts.length > 0 || paidDebts.length > 0) && (
+            {/* Economic Breakdown (Legacy logic for other debts) */}
+            {(nettedDebts.length > 0 || paidDebts.length > 0) && (
               <div className={styles.debtsBreakdown}>
-                <h4 className={styles.breakdownTitle}>Resumen Económico</h4>
+                <h4
+                  className={styles.breakdownTitle}
+                  style={{ marginTop: "0.5rem" }}
+                >
+                  Resumen de Movimientos
+                </h4>
                 <div className={styles.breakdownList}>
-                  {/* Pending Debts */}
-                  {pendingDebts.map((d) => (
-                    <div key={d.id} className={styles.breakdownItem}>
+                  {/* Pending Debts (Netted) */}
+                  {nettedDebts
+                    .filter((d) => Number(d.monto) > 0)
+                    .map((d, idx) => (
+                      <div key={d.id || idx} className={styles.breakdownItem}>
+                        <span className={styles.breakdownConcept}>
+                          {d.concepto || d.tipoDeuda}{" "}
+                          {d.mesAplicado ? `(${d.mesAplicado})` : ""}
+                          {d.estado === "PAGADO_PARCIAL" && (
+                            <span className={styles.partialBadge}>Parcial</span>
+                          )}
+                        </span>
+                        <span className={styles.breakdownAmount}>
+                          S/. {Number(d.monto).toFixed(2)}
+                        </span>
+                      </div>
+                    ))}
+
+                  {/* Consumos Log */}
+                  {consumos.map((c) => (
+                    <div
+                      key={c.id}
+                      className={styles.breakdownItem}
+                      style={{ color: "#059669" }}
+                    >
                       <span className={styles.breakdownConcept}>
-                        {d.concepto || d.tipoDeuda}{" "}
-                        {d.mesAplicado ? `(${d.mesAplicado})` : ""}
-                        {d.estado === "PAGADO_PARCIAL" && (
-                          <span className={styles.partialBadge}>Parcial</span>
-                        )}
-                        {d.estado === "VENCIDO" && (
-                          <span
-                            className={styles.vencidoBadge}
-                            style={{
-                              backgroundColor: "#fef2f2",
-                              color: "#ef4444",
-                              fontSize: "0.7rem",
-                              padding: "2px 6px",
-                              borderRadius: "10px",
-                              marginLeft: "8px",
-                              fontWeight: 600,
-                            }}
-                          >
-                            Vencido
-                          </span>
-                        )}
+                        Consumo Crédito ({c.mes})
+                        <span
+                          style={{
+                            fontSize: "0.7rem",
+                            color: "#10b981",
+                            marginLeft: "8px",
+                            fontWeight: 600,
+                          }}
+                        >
+                          Canjeado
+                        </span>
                       </span>
                       <span className={styles.breakdownAmount}>
-                        S/. {Number(d.monto).toFixed(2)}
+                        S/. {Number(c.monto).toFixed(2)}
                       </span>
                     </div>
                   ))}
+
                   {/* Paid Debts */}
                   {paidDebts.map((d) => (
                     <div

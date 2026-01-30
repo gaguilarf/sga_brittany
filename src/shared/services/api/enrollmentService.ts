@@ -21,4 +21,9 @@ export const EnrollmentService = {
     const res = await apiClient.get<EnrollmentResponse[]>("/enrollments");
     return res.data || [];
   },
+
+  async getAccountStatement(id: number): Promise<any> {
+    const res = await apiClient.get(`/enrollments/${id}/account-statement`);
+    return res.data;
+  },
 };

@@ -104,24 +104,21 @@ export const ConfigurationStep = ({
               <>
                 {/* 2. Enrollment Type Selection Buttons */}
                 <div className={styles.enrollmentTypeToggle}>
-                  {formData.enrollmentType !== "PRODUCT" && (
-                    <button
-                      type="button"
-                      className={`${styles.toggleBtn} ${
-                        formData.enrollmentType === "PLAN" ? styles.active : ""
-                      }`}
-                      onClick={() => handleEnrollmentTypeChange("PLAN")}
-                    >
-                      Plan Académico
-                    </button>
-                  )}
+                  <button
+                    type="button"
+                    className={`${styles.toggleBtn} ${
+                      formData.enrollmentType === "PLAN" ? styles.active : ""
+                    }`}
+                    onClick={() => handleEnrollmentTypeChange("PLAN")}
+                  >
+                    Plan Académico
+                  </button>
                   <button
                     type="button"
                     className={`${styles.toggleBtn} ${
                       formData.enrollmentType === "PRODUCT" ? styles.active : ""
                     }`}
                     onClick={() => handleEnrollmentTypeChange("PRODUCT")}
-                    disabled={formData.enrollmentType === "PRODUCT"}
                   >
                     Producto / Servicio
                   </button>

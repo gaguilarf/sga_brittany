@@ -67,6 +67,7 @@ export default function PagosPage() {
   const [activeEnrollment, setActiveEnrollment] =
     useState<EnrollmentResponse | null>(null);
   const [planPrices, setPlanPrices] = useState<any[]>([]);
+  const [latestDebtMonth, setLatestDebtMonth] = useState<string | null>(null);
 
   // Calculated
   const totalDebt = debts.reduce(
@@ -152,14 +153,17 @@ export default function PagosPage() {
       const months = [...payment.mesesAdelantados];
 
       let nextDate = new Date();
+      nextDate.setDate(1);
+
       if (months.length > 0) {
         const last = months[months.length - 1].mes;
         const [year, month] = last.split("-").map(Number);
         nextDate = new Date(year, month, 1);
-      } else {
-        nextDate.setDate(1);
+      } else if (latestDebtMonth) {
+        const [year, month] = latestDebtMonth.split("-").map(Number);
+        nextDate = new Date(year, month, 1);
       }
-      const mesStr = nextDate.toISOString().slice(0, 7);
+      const mesStr = `${nextDate.getFullYear()}-${String(nextDate.getMonth() + 1).padStart(2, "0")}`;
       const monthlyPrice =
         planPrices.find((p) => p.planId === activeEnrollment?.planId)
           ?.precioMensualidad || 0;
@@ -266,6 +270,7 @@ export default function PagosPage() {
     setPayments([{ tipo: "", monto: "", mesesAdelantados: [] }]);
     setActiveEnrollment(null);
     setPlanPrices([]);
+    setLatestDebtMonth(null);
     fetchDebts(selected.id);
   };
 
@@ -279,6 +284,8 @@ export default function PagosPage() {
     setPayments([{ tipo: "", monto: "", mesesAdelantados: [] }]);
     setActiveEnrollment(null);
     setPlanPrices([]);
+    setLatestDebtMonth(null);
+    setInvoiceNumber("");
   };
 
   const fetchDebts = async (studentId: number) => {
@@ -298,14 +305,36 @@ export default function PagosPage() {
       }
 
       let allDebts: any[] = [];
+      let overallMaxMes: string | null = null;
+
       for (const enr of enrollments) {
-        const enrDebts = await DebtService.getByEnrollmentId(enr.id);
-        // Fixed: Include PARTIAL and EXPIRED debts
-        const pending = enrDebts.filter((d: any) =>
-          ["PENDIENTE", "PAGADO_PARCIAL", "VENCIDO"].includes(d.estado),
-        );
-        allDebts = [...allDebts, ...pending];
+        // Use unified Account Statement logic
+        const statement = await EnrollmentService.getAccountStatement(enr.id);
+        const enrDebts = statement.nettedDebts; // Already filtered by state in backend but needs netting
+
+        // Find max mesAplicado from raw debts for prepayment suggestions
+        statement.debts.forEach((d: any) => {
+          if (d.mesAplicado && d.mesAplicado.match(/^\d{4}-\d{2}$/)) {
+            if (!overallMaxMes || d.mesAplicado > overallMaxMes) {
+              overallMaxMes = d.mesAplicado;
+            }
+          }
+        });
+
+        // Also look at existing prepayments that haven't been applied yet
+        statement.nettedPrepayments.forEach((p: any) => {
+          if (p.mes && p.mes.match(/^\d{4}-\d{2}$/)) {
+            if (!overallMaxMes || p.mes > overallMaxMes) {
+              overallMaxMes = p.mes;
+            }
+          }
+        });
+
+        allDebts = [...allDebts, ...enrDebts];
       }
+
+      setLatestDebtMonth(overallMaxMes);
+      // Filter out debts that are fully netted (monto <= 0)
       setDebts(allDebts.filter((d: any) => Number(d.monto) > 0));
     } catch (err) {
       console.error("Error fetching debts", err);
@@ -353,6 +382,11 @@ export default function PagosPage() {
     if (!student) return;
     if (payments.length === 0) {
       setToast({ message: "Agregue al menos un concepto", type: "error" });
+      return;
+    }
+
+    if (!invoiceNumber.trim()) {
+      setToast({ message: "Ingrese el número de boleta", type: "error" });
       return;
     }
 
@@ -422,10 +456,7 @@ export default function PagosPage() {
       }
 
       setToast({ message: "Pagos registrados exitosamente", type: "success" });
-      setPayments([{ tipo: "", monto: "", mesesAdelantados: [] }]);
-      setInvoiceNumber("");
-      setSelectedDebt(null);
-      fetchDebts(student.id);
+      handleClearSearch();
     } catch (err) {
       console.error(err);
       setToast({ message: "Error al registrar pagos", type: "error" });
@@ -912,7 +943,10 @@ export default function PagosPage() {
               </div>
 
               <div className={styles.formGroup}>
-                <label className={styles.label}>Número de Boleta/Factura</label>
+                <label className={styles.label}>
+                  Número de Boleta/Factura{" "}
+                  <span style={{ color: "#ef4444" }}>*</span>
+                </label>
                 <input
                   type="text"
                   placeholder="Ejem: B001-0001"
@@ -930,13 +964,7 @@ export default function PagosPage() {
                 <span>S/ {totalDebt.toFixed(2)}</span>
               </div>
               <div className={styles.summaryRow}>
-                <span>Total a Pagar (Conceptos)</span>
-                <span className={styles.highlightAmount}>
-                  S/ {totalPaymentAmount.toFixed(2)}
-                </span>
-              </div>
-              <div className={styles.summaryRowTotal}>
-                <span>Saldo Final Estimado</span>
+                <span>Deuda Restante</span>
                 <span>
                   S/{" "}
                   {Math.max(
@@ -951,6 +979,13 @@ export default function PagosPage() {
                         0,
                       ),
                   ).toFixed(2)}
+                </span>
+              </div>
+
+              <div className={styles.summaryRowTotal}>
+                <span>Total a Pagar (Conceptos)</span>
+                <span className={styles.highlightAmount}>
+                  S/ {totalPaymentAmount.toFixed(2)}
                 </span>
               </div>
             </div>

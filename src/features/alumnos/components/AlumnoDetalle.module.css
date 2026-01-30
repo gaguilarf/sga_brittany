@@ -485,6 +485,13 @@
   padding: 1.25rem;
   border-radius: var(--radius-md);
   background: #f8fafc;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.creditCard {
+  background: #ecfdf5;
+  border-color: #d1fae5;
 }
 
 .metricValue {
@@ -494,9 +501,80 @@
   margin-top: 0.5rem;
 }
 
+.creditValue {
+  color: #059669;
+}
+
+.debtCardAlert {
+  background: #fef2f2 !important;
+  border-color: #fee2e2 !important;
+}
+
+.debtValueCritical {
+  color: #dc2626 !important;
+}
+
 .statusOnTrack {
   color: #16a34a;
 }
+
+/* Summary Table refined */
+.summaryTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.summaryTable th {
+  text-align: left;
+  padding: 0.75rem;
+  border-bottom: 2px solid #f1f5f9;
+  font-size: 0.8rem;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.summaryTable td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.9rem;
+}
+
+.statusBadgeRefined {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.statusCompleto {
+  background: #e6f9ed;
+  color: #16a34a;
+}
+
+.statusParcial {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.statusPendiente {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.statusTotal {
+  color: #059669;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.statusParcialSmall {
+  color: #c2410c;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+/* ... existing styles ... */
 .caption {
   display: block;
   font-size: 0.75rem;

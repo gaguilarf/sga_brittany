@@ -373,8 +373,8 @@
   padding-top: 1rem;
   border-top: 1px solid #e2e8f0;
   font-weight: 700;
-  font-size: 1.125rem;
-  color: #1e293b;
+  font-size: 1.25rem;
+  color: var(--color-blue-primary);
 }
 
 .actions {
@@ -806,5 +806,5 @@
 .highlightAmount {
   color: #f97316;
   font-weight: 800;
-  font-size: 1rem;
+  font-size: 1.35rem;
 }
