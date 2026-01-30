@@ -189,6 +189,20 @@
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.readOnlyBadge {
+  background: var(--color-orange-500);
+  color: white;
+  font-size: 0.65rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .sectionBody {
@@ -1090,4 +1104,38 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+.enrollmentTypeToggle {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.toggleBtn {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-gray-200);
+  background: var(--color-white);
+  color: var(--color-gray-500);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.toggleBtn:hover:not(:disabled) {
+  border-color: var(--color-blue-primary);
+  color: var(--color-blue-primary);
+}
+
+.toggleBtn.active {
+  background: var(--color-blue-primary);
+  color: var(--color-white);
+  border-color: var(--color-blue-primary);
+  box-shadow: 0 4px 6px rgba(35, 91, 204, 0.1);
+}
+
+.toggleBtn:disabled {
+  cursor: default;
+  opacity: 0.8;
 }

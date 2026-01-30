@@ -25,7 +25,12 @@ export const StudentStep = ({
       <div className={styles.column}>
         <section className={styles.sectionCard}>
           <div className={styles.sectionHeader}>
-            <h3>Datos Personales</h3>
+            <h3>
+              Datos Personales{" "}
+              {isExistingStudent && (
+                <span className={styles.readOnlyBadge}>SÓLO LECTURA</span>
+              )}
+            </h3>
           </div>
           <div className={styles.sectionBody}>
             <div className={styles.rowFull}>

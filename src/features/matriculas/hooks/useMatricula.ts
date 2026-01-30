@@ -147,6 +147,11 @@ export const useMatricula = () => {
             if (typeParam === "PRODUCT") {
               setCurrentStep(2);
               setEnrollmentFlow("existing");
+              setIsExistingStudent(true); // Ensure Step 1 is locked
+              setFormData((prev) => ({
+                ...prev,
+                enrollmentType: "PRODUCT",
+              }));
             }
           }
         } catch (err) {

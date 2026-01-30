@@ -15,11 +15,8 @@ import {
   User,
   Calendar,
   MapPin,
-  GraduationCap,
-  Building2,
-  Clock,
-  BookOpen,
   Tag,
+  GraduationCap,
 } from "lucide-react";
 import { AcademicService } from "@/shared/services/api/academicService";
 import PrepaymentForm from "./PrepaymentForm";
@@ -46,7 +43,7 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editForm, setEditForm] = useState<any>(null); // Use any for extended fields
   const [isSaving, setIsSaving] = useState(false);
-  const [enrollment, setEnrollment] = useState<EnrollmentResponse | null>(null);
+  const [enrollments, setEnrollments] = useState<EnrollmentResponse[]>([]);
   const [campus, setCampus] = useState<Campus | null>(null);
   const [plan, setPlan] = useState<Plan | null>(null);
   const [payments, setPayments] = useState<any[]>([]);
@@ -59,11 +56,20 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
   const [debts, setDebts] = useState<DebtResponse[]>([]);
   const [loadingDetails, setLoadingDetails] = useState(true);
 
-  // Resolved names for display
-  const [courseName, setCourseName] = useState<string>("");
-  const [levelName, setLevelName] = useState<string>("");
-  const [cycleName, setCycleName] = useState<string>("");
-  const [productName, setProductName] = useState<string>("");
+  // Resolved names for display (Map of enrollmentId -> name info)
+  const [resolvedEnrollmentData, setResolvedEnrollmentData] = useState<
+    Record<
+      number,
+      {
+        course?: string;
+        level?: string;
+        cycle?: string;
+        product?: string;
+        campusName?: string;
+        planName?: string;
+      }
+    >
+  >({});
   const [isPrepaymentModalOpen, setIsPrepaymentModalOpen] = useState(false);
 
   useEffect(() => {
@@ -88,20 +94,26 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
       };
       setAlumno(updatedAlumno);
 
-      const enrollments = await EnrollmentService.getByStudentId(
+      const enrList = await EnrollmentService.getByStudentId(
         parseInt(alumno.id),
       );
+      setEnrollments(enrList);
 
-      if (enrollments.length > 0) {
-        const activeEnrollment = enrollments[enrollments.length - 1]; // Use latest
-        setEnrollment(activeEnrollment);
+      if (enrList.length > 0) {
+        // We still need one "main" enrollment for debts/payments UI for now, or we show all
+        // Let's use the first active or latest for the global debts view
+        const activeEnrollment =
+          enrList.find((e) => e.active) || enrList[enrList.length - 1];
 
-        const [paymentsData, debtsData, campuses, plans] = await Promise.all([
-          PaymentService.getByEnrollmentId(activeEnrollment.id),
-          DebtService.getByEnrollmentId(activeEnrollment.id),
-          CampusService.getAll(),
-          PlanService.getAll(),
-        ]);
+        const [paymentsData, debtsData, campuses, plans, courses, products] =
+          await Promise.all([
+            PaymentService.getByEnrollmentId(activeEnrollment.id),
+            DebtService.getByEnrollmentId(activeEnrollment.id),
+            CampusService.getAll(),
+            PlanService.getAll(),
+            AcademicService.getCourses(),
+            ProductService.getAll(),
+          ]);
 
         setCampus(
           campuses.find((c) => c.id === activeEnrollment.campusId) || null,
@@ -115,42 +127,53 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
         );
         setDebts(debtsData);
 
-        // Resolve names based on enrollmentType
-        if (activeEnrollment.enrollmentType === "PLAN") {
-          const [courses, products] = await Promise.all([
-            AcademicService.getCourses(),
-            ProductService.getAll(),
-          ]);
+        // Resolve info for ALL enrollments
+        const resolvedMap: any = {};
+        for (const enr of enrList) {
+          const res: any = {};
+          const enrCampus = campuses.find((c) => c.id === enr.campusId);
+          res.campusName = enrCampus?.name || "N/A";
 
-          if (activeEnrollment.courseId) {
-            const course = courses.find(
-              (c) => c.id === activeEnrollment.courseId,
-            );
-            if (course) {
-              setCourseName(course.name);
-              // Fetch levels for this course
-              const levels = await AcademicService.getLevelsByCourse(course.id);
-              const level = levels.find(
-                (l) => l.id === activeEnrollment.initialLevelId,
-              );
-              if (level) {
-                setLevelName(level.nombreNivel);
-                // Fetch cycles for this level
-                const cycles = await AcademicService.getCyclesByLevel(level.id);
-                const cycle = cycles.find(
-                  (cy) => cy.id === activeEnrollment.initialCycleId,
-                );
-                if (cycle) setCycleName(cycle.nombreCiclo);
-              }
+          if (enr.enrollmentType === "PLAN") {
+            const enrPlan = plans.find((p) => p.id === enr.planId);
+            res.planName = enrPlan?.name || "Plan Académico";
+
+            if (enr.courseId) {
+              const course = courses.find((c) => c.id === enr.courseId);
+              res.course = course?.name;
             }
+          } else {
+            const product = products.find((p) => p.id === enr.productId);
+            res.product = product?.name || "Producto / Servicio";
           }
-        } else if (activeEnrollment.enrollmentType === "PRODUCT") {
-          const products = await ProductService.getAll();
-          const product = products.find(
-            (p) => p.id === activeEnrollment.productId,
-          );
-          if (product) setProductName(product.name);
+          resolvedMap[enr.id] = res;
         }
+
+        // Parallel resolve levels/cycles for PLAN enrollments
+        await Promise.all(
+          enrList
+            .filter((e) => e.enrollmentType === "PLAN" && e.initialLevelId)
+            .map(async (e) => {
+              try {
+                const levels = await AcademicService.getLevelsByCourse(
+                  e.courseId,
+                );
+                const level = levels.find((l) => l.id === e.initialLevelId);
+                if (level) {
+                  resolvedMap[e.id].level = level.nombreNivel;
+                  const cycles = await AcademicService.getCyclesByLevel(
+                    level.id,
+                  );
+                  const cycle = cycles.find((c) => c.id === e.initialCycleId);
+                  if (cycle) resolvedMap[e.id].cycle = cycle.nombreCiclo;
+                }
+              } catch (err) {
+                console.error("Error resolving levels for enrollment", e.id);
+              }
+            }),
+        );
+
+        setResolvedEnrollmentData(resolvedMap);
       }
       return updatedAlumno;
     } catch (error: any) {
@@ -224,7 +247,7 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
           </h1>
           <p className={styles.subtitle}>
             ID Estudiante: {alumno.dni} |{" "}
-            {enrollment
+            {enrollments.length > 0
               ? `Próximo pago: ${totalSaldo > 0 ? "Pendiente" : "Al día"}`
               : "Sin matrícula activa"}
           </p>
@@ -266,7 +289,9 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
           <button
             className={styles.btnPrepayment}
             onClick={() => setIsPrepaymentModalOpen(true)}
-            disabled={!enrollment}
+            disabled={
+              !enrollments.some((e) => e.active && e.enrollmentType === "PLAN")
+            }
           >
             <Calendar size={18} />
             Pago Adelantado
@@ -474,19 +499,38 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
             <div className={styles.profileInfo}>
               <h2>{alumno.nombre}</h2>
               <div className={styles.sidebarAcademicInfo}>
-                {enrollment ? (
-                  enrollment.enrollmentType === "PLAN" ? (
-                    <div className={styles.sidebarPlan}>
-                      <div className={styles.sidebarTitle}>{plan?.name}</div>
-                      <div className={styles.sidebarSubtitle}>
-                        {courseName} {levelName} {cycleName}
+                {enrollments.length > 0 ? (
+                  enrollments.map((enr) => {
+                    const resolved = resolvedEnrollmentData[enr.id];
+                    return (
+                      <div
+                        key={enr.id}
+                        className={styles.sidebarEnrollmentItem}
+                      >
+                        {enr.enrollmentType === "PLAN" ? (
+                          <div className={styles.sidebarPlan}>
+                            <span className={styles.sidebarLabel}>PLAN</span>
+                            <div className={styles.sidebarTitle}>
+                              {resolved?.planName || "Plan Académico"}
+                            </div>
+                            <div className={styles.sidebarSubtitle}>
+                              {resolved?.course} {resolved?.level}{" "}
+                              {resolved?.cycle}
+                            </div>
+                          </div>
+                        ) : (
+                          <div className={styles.sidebarProduct}>
+                            <span className={styles.sidebarLabelProduct}>
+                              PRODUCTO
+                            </span>
+                            <div className={styles.sidebarTitle}>
+                              {resolved?.product || "Producto / Servicio"}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  ) : (
-                    <div className={styles.sidebarProduct}>
-                      <div className={styles.sidebarTitle}>{productName}</div>
-                    </div>
-                  )
+                    );
+                  })
                 ) : (
                   <span className={styles.noEnrollment}>
                     Sin curso asignado
@@ -625,7 +669,7 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
               Contacto del apoderado
             </h3>
             <div className={styles.emergencyInfo}>
-              {!alumno.celularApoderado && !enrollment ? (
+              {!alumno.celularApoderado && enrollments.length === 0 ? (
                 <h3>No registra contacto del apoderado</h3>
               ) : (
                 <>
@@ -690,50 +734,72 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
               </button>
             </div>
             <div className={styles.academicBody}>
-              <div className={styles.infoGrid}>
-                <div>
-                  <div className={styles.infoValue}>
-                    {enrollment ? (
-                      enrollment.enrollmentType === "PLAN" ? (
-                        <div className={styles.planInfo}>
-                          <span className={styles.typeTag}>PLAN</span>
-                          <div className={styles.mainTitle}>{plan?.name}</div>
-                          <div className={styles.subDetail}>
-                            {courseName} {levelName} {cycleName}
+              <div className={styles.enrollmentsList}>
+                {enrollments.map((enr) => {
+                  const resolved = resolvedEnrollmentData[enr.id];
+                  return (
+                    <div key={enr.id} className={styles.enrollmentCardItem}>
+                      <div className={styles.infoGrid}>
+                        <div>
+                          <div className={styles.infoValue}>
+                            {enr.enrollmentType === "PLAN" ? (
+                              <div className={styles.planInfo}>
+                                <span className={styles.typeTag}>PLAN</span>
+                                <div className={styles.mainTitle}>
+                                  {resolved?.planName}
+                                </div>
+                                <div className={styles.subDetail}>
+                                  {resolved?.course} {resolved?.level}{" "}
+                                  {resolved?.cycle}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className={styles.productInfo}>
+                                <span className={styles.typeTagProduct}>
+                                  PRODUCTO
+                                </span>
+                                <div className={styles.mainTitle}>
+                                  {resolved?.product}
+                                </div>
+                                {enr.examDate && (
+                                  <div className={styles.subDetail}>
+                                    Fecha examen:{" "}
+                                    {new Date(enr.examDate).toLocaleDateString(
+                                      "es-PE",
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </div>
                         </div>
-                      ) : (
-                        <div className={styles.productInfo}>
-                          <span className={styles.typeTagProduct}>
-                            PRODUCTO
+                        <div>
+                          <span className={styles.infoLabel}>
+                            Grupo / Horario
                           </span>
-                          <div className={styles.mainTitle}>{productName}</div>
+                          <div className={styles.infoValue}>
+                            {enr.horario || "N/A"}
+                          </div>
                         </div>
-                      )
-                    ) : (
-                      "N/A"
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <span className={styles.infoLabel}>Grupo / Horario</span>
-                  <div className={styles.infoValue}>
-                    {enrollment?.horario || "N/A"}
-                  </div>
-                </div>
-                <div>
-                  <span className={styles.infoLabel}>Profesor Asignado</span>
-                  <div className={styles.teacherInfo}>
-                    <div className={styles.teacherAvatar}>U</div>
-                    <div className={styles.infoValue}>Sin asignar</div>
-                  </div>
-                </div>
-                <div>
-                  <span className={styles.infoLabel}>Sede</span>
-                  <div className={styles.infoValue}>
-                    {campus ? campus.name : "N/A"}
-                  </div>
-                </div>
+                        <div>
+                          <span className={styles.infoLabel}>Sede</span>
+                          <div className={styles.infoValue}>
+                            {resolved?.campusName}
+                          </div>
+                        </div>
+                        <div>
+                          <span className={styles.infoLabel}>Estado</span>
+                          <div className={styles.infoValue}>
+                            {enr.active ? "Activo" : "Inactivo"}
+                          </div>
+                        </div>
+                      </div>
+                      {enr.enrollmentType === "PLAN" && (
+                        <div className={styles.divider} />
+                      )}
+                    </div>
+                  );
+                })}
               </div>
 
               <div className={styles.attendanceSection}>
@@ -989,18 +1055,24 @@ const AlumnoDetalle: React.FC<AlumnoDetalleProps> = ({
           </div>
         </div>
       </div>
-      {isPrepaymentModalOpen && enrollment && (
-        <PrepaymentForm
-          enrollment={enrollment}
-          plan={plan}
-          campusId={alumno.campusId || 0}
-          onClose={() => setIsPrepaymentModalOpen(false)}
-          onSuccess={() => {
-            fetchStudentDetails();
-            alert("Pago adelantado registrado con éxito");
-          }}
-        />
-      )}
+      {isPrepaymentModalOpen &&
+        enrollments.find((e) => e.active && e.enrollmentType === "PLAN") && (
+          <PrepaymentForm
+            enrollment={
+              enrollments.find((e) => e.active && e.enrollmentType === "PLAN")!
+            }
+            plan={plan}
+            campusId={
+              enrollments.find((e) => e.active && e.enrollmentType === "PLAN")
+                ?.campusId || 0
+            }
+            onClose={() => setIsPrepaymentModalOpen(false)}
+            onSuccess={() => {
+              fetchStudentDetails();
+              alert("Pago adelantado registrado con éxito");
+            }}
+          />
+        )}
     </div>
   );
 };

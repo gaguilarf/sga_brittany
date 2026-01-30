@@ -224,7 +224,7 @@ export default function PagosPage() {
 
   const handleProductRedirect = () => {
     if (!student) return;
-    router.push(`/matriculas?studentId=${student.id}&type=PRODUCT`);
+    router.push(`/admin/matriculas?studentId=${student.id}&type=PRODUCT`);
   };
 
   // Product options

@@ -53,9 +53,12 @@ export const ConfigurationStep = ({
   const showSchedule =
     formData.enrollmentType === "PLAN" ||
     (formData.enrollmentType === "PRODUCT" &&
-      selectedProduct?.requiresSchedule);
+      selectedProduct?.requiresSchedule &&
+      !selectedProduct.name.toLowerCase().includes("british council"));
   const showExamDate =
-    formData.enrollmentType === "PRODUCT" && selectedProduct?.requiresExamDate;
+    formData.enrollmentType === "PRODUCT" &&
+    (selectedProduct?.requiresExamDate ||
+      selectedProduct?.name.toLowerCase().includes("british council"));
 
   return (
     <div className={styles.formGrid}>
@@ -101,21 +104,24 @@ export const ConfigurationStep = ({
               <>
                 {/* 2. Enrollment Type Selection Buttons */}
                 <div className={styles.enrollmentTypeToggle}>
-                  <button
-                    type="button"
-                    className={`${styles.toggleBtn} ${
-                      formData.enrollmentType === "PLAN" ? styles.active : ""
-                    }`}
-                    onClick={() => handleEnrollmentTypeChange("PLAN")}
-                  >
-                    Plan Académico
-                  </button>
+                  {formData.enrollmentType !== "PRODUCT" && (
+                    <button
+                      type="button"
+                      className={`${styles.toggleBtn} ${
+                        formData.enrollmentType === "PLAN" ? styles.active : ""
+                      }`}
+                      onClick={() => handleEnrollmentTypeChange("PLAN")}
+                    >
+                      Plan Académico
+                    </button>
+                  )}
                   <button
                     type="button"
                     className={`${styles.toggleBtn} ${
                       formData.enrollmentType === "PRODUCT" ? styles.active : ""
                     }`}
                     onClick={() => handleEnrollmentTypeChange("PRODUCT")}
+                    disabled={formData.enrollmentType === "PRODUCT"}
                   >
                     Producto / Servicio
                   </button>

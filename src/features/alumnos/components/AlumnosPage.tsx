@@ -34,16 +34,22 @@ const mapStudentToAlumno = (
   campuses: Campus[] = [],
 ): Alumno => {
   const studentEnrollments = enrollments.filter((e) => e.studentId === s.id);
+
+  const studentCampuses = Array.from(
+    new Set(
+      studentEnrollments
+        .map((e) => campuses.find((c) => c.id === e.campusId)?.name)
+        .filter(Boolean),
+    ),
+  );
+
+  const sedeName =
+    studentCampuses.length > 0 ? studentCampuses.join(", ") : "Sin sede";
+
   const latestEnrollment =
     studentEnrollments.length > 0
       ? studentEnrollments[studentEnrollments.length - 1]
       : null;
-
-  let sedeName = "Sin sede";
-  if (latestEnrollment) {
-    const campus = campuses.find((c) => c.id === latestEnrollment.campusId);
-    if (campus) sedeName = campus.name;
-  }
 
   // Use enrollment creation date if available, otherwise student creation date
   const registrationDate = latestEnrollment
