@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import styles from "./Header.module.css";
 
@@ -37,12 +38,12 @@ export default function Header() {
               FAQ
             </a>
 
-            <a
+            <Link
               href="/login"
               className={`btn btn-small btn-primary ${styles.loginBtn}`}
             >
               Iniciar Sesión
-            </a>
+            </Link>
           </nav>
         </div>
       </div>

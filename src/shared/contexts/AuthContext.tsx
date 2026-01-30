@@ -39,9 +39,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const checkSession = async () => {
     // Only set loading if we don't have a cached user to avoid jumping
+    // But if we're on the landing page, we might not want to show a loader at all
     const hasCachedUser = !!localStorage.getItem("auth_user");
-    if (!hasCachedUser) setIsLoading(true);
 
+    // If no cached user, we don't "need" to show loading because the user
+    // is likely a guest visiting the landing page.
+    if (!hasCachedUser) {
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(true);
     try {
       const userData = await AuthController.checkSession();
       if (userData) {
